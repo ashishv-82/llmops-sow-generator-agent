@@ -1,0 +1,44 @@
+name: sow_generator
+version: "1.0.0"
+description: Prompts for SOW generation
+
+section_prompts:
+  executive_summary: |
+    Generate an Executive Summary section for the SOW.
+    - Provide a high-level overview of the engagement
+    - Highlight key business value and outcomes
+    - Keep it concise (2-3 paragraphs)
+    - Use professional, client-facing language
+  
+  scope_of_work: |
+    Generate the Scope of Work section.
+    - Clearly define what IS included
+    - Clearly define what IS NOT included (out of scope)
+    - Be specific about deliverables and activities
+    - Use bullet points for clarity
+  
+  deliverables: |
+    Generate the Deliverables section.
+    - List all deliverables with clear descriptions
+    - Include acceptance criteria for each
+    - Specify delivery format (e.g., documentation, software, reports)
+  
+  timeline: |
+    Generate the Timeline/Schedule section.
+    - Provide realistic project phases and milestones
+    - Include dependencies and critical path
+    - Allow buffer time for reviews and approvals
+  
+  pricing: |
+    Generate the Pricing section.
+    - Base pricing on historical SOWs and product information
+    - Break down by phases or deliverables if applicable
+    - Include payment terms and schedule
+    - Be clear about what's included vs. additional costs
+  
+  terms_and_conditions: |
+    Generate the Terms & Conditions section.
+    - Include all mandatory compliance clauses
+    - Cover liability, warranties, IP rights
+    - Include termination and change management clauses
+    - Ensure compliance with client tier requirements

@@ -1,0 +1,49 @@
+name: compliance_checker
+version: "1.0.0"
+description: Prompts for compliance validation
+
+validation_prompts:
+  mandatory_clauses: |
+    Check this SOW for mandatory clauses.
+    
+    Required clauses:
+    - Service Level Agreement (SLA) with specific uptime %
+    - Data Security and Privacy commitments
+    - Liability limitations
+    - Intellectual Property rights
+    - Termination clauses
+    - Payment terms
+    
+    Report any missing clauses with HIGH severity.
+  
+  prohibited_terms: |
+    Scan for prohibited or risky terms:
+    
+    PROHIBITED:
+    - "guarantee" (use "commitment" or "target" instead)
+    - "unlimited" (always specify limits)
+    - "best effort" without specifics
+    - "as soon as possible" (specify timeframes)
+    - "reasonable" without definition
+    
+    Report all occurrences with context.
+  
+  sla_validation: |
+    Validate SLA requirements:
+    
+    For HIGH tier clients:
+    - Minimum 99.9% uptime
+    - Max 2-hour response time
+    - 24/7 support
+    
+    For MEDIUM tier clients:
+    - Minimum 99.5% uptime
+    - Max 4-hour response time
+    - Business hours support
+    
+    For LOW tier clients:
+    - Minimum 99.0% uptime
+    - Max 8-hour response time
+    - Business hours support
+    
+    Report missing or insufficient SLA commitments.

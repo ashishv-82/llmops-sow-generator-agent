@@ -22,7 +22,7 @@ graph TB
     
     RESEARCH["🔍 RESEARCH TOOLS<br/><br/>search_crm<br/>search_product_kb<br/>search_historical_sows"]
     CONTEXT["📋 CONTEXT TOOLS<br/><br/>assemble_context<br/>assemble_client_brief"]
-    CONTENT["✍️ CONTENT TOOLS<br/><br/>generate_sow_draft<br/>revise_section<br/>generate_summary<br/>export_docx"]
+    CONTENT["✍️ CONTENT TOOLS<br/><br/>generate_sow_draft<br/>generate_sow_draft_with_reflection<br/>revise_section<br/>generate_summary"]
     COMPLIANCE["✅ COMPLIANCE TOOLS<br/><br/>check_mandatory_clauses<br/>check_prohibited_terms<br/>generate_report"]
     UTILS["🛠️ UTILITIES<br/><br/>parse_document (PDF/DOCX)<br/>export_sow (DOCX)"]
     
@@ -46,7 +46,7 @@ graph TB
 
 | Component | Role | File |
 |-----------|------|------|
-| **Planner** | Orchestrates workflow, decides tool order | `planner.py` |
+| **Planner** | Orchestrates workflow, decides tool order | `core/planner.py` |
 | **Research Tools** | Fetches data from CRM, KB, historical docs | `tools/research.py` |
 | **Context Tools** | Assembles relevant info into coherent package | `tools/context.py` |
 | **Content Tools** | Generates SOW sections, summaries, text | `tools/content.py` |
@@ -241,7 +241,8 @@ sow-generator/
 - `search_compliance_kb(product: str, client_tier: str)` - Get compliance requirements
 
 #### Content Tools (`tools/content.py`)
-- `generate_sow_draft(context: dict, template: str)` - Generate full SOW
+- `generate_sow_draft(context: dict, template: str)` - Generate full SOW (fast, 1 LLM call)
+- `generate_sow_draft_with_reflection(context: dict, template: str)` - Production-grade SOW with reflection (3 LLM calls: generate → critique → refine)
 - `generate_section(section_name: str, context: dict)` - Generate specific section
 - `revise_section(section: str, feedback: str)` - Revise based on feedback
 - `generate_summary(documents: list)` - Summarize retrieved documents

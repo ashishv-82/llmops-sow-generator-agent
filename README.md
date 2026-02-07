@@ -10,6 +10,53 @@ A production-grade AI agent for automating Statement of Work (SOW) generation, r
 - **Product Research**: Search product knowledge bases for features and pricing
 - **Document Handling**: Ingest PDF/DOCX and export SOWs to DOCX format
 
+---
+
+## Agent Architecture: 1 Brain + 4 Tool Groups
+
+The agent is designed as **1 Planner (the "brain")** that orchestrates **4 specialized tool groups**:
+
+```mermaid
+graph TB
+    USER["👤 USER REQUESTS<br/><br/>• Create SOW for Client X<br/>• Review this SOW document<br/>• Research Client Y background<br/>• What products fit this scope?"]
+    
+    PLANNER["🧠 PLANNER / ORCHESTRATOR<br/><br/>• Understands user requests<br/>• Breaks tasks into steps<br/>• Decides which tools to call<br/>• Synthesizes final response"]
+    
+    RESEARCH["🔍 RESEARCH TOOLS<br/><br/>search_crm<br/>search_product_kb<br/>search_historical_sows"]
+    CONTEXT["📋 CONTEXT TOOLS<br/><br/>assemble_context<br/>assemble_client_brief"]
+    CONTENT["✍️ CONTENT TOOLS<br/><br/>generate_sow_draft<br/>generate_sow_draft_with_reflection<br/>revise_section<br/>generate_summary"]
+    COMPLIANCE["✅ COMPLIANCE TOOLS<br/><br/>check_mandatory_clauses<br/>check_prohibited_terms<br/>generate_report"]
+    UTILS["🛠️ UTILITIES<br/><br/>parse_document (PDF/DOCX)<br/>export_sow (DOCX)"]
+    
+    USER --> PLANNER
+    PLANNER --> RESEARCH
+    PLANNER --> CONTEXT
+    PLANNER --> CONTENT
+    PLANNER --> COMPLIANCE
+    PLANNER --> UTILS
+
+    style USER fill:#34495e,stroke:#2c3e50,color:#fff
+    style PLANNER fill:#4a90d9,stroke:#2d5a87,color:#fff
+    style RESEARCH fill:#f5a623,stroke:#c17f1a,color:#fff
+    style CONTEXT fill:#7ed321,stroke:#5a9a17,color:#fff
+    style CONTENT fill:#9b59b6,stroke:#7b3d96,color:#fff
+    style COMPLIANCE fill:#e74c3c,stroke:#c0392b,color:#fff
+    style UTILS fill:#95a5a6,stroke:#7f8c8d,color:#fff
+```
+---
+
+### Component Responsibilities
+
+| Component | Role | File |
+|-----------|------|------|
+| **Planner** | Orchestrates workflow, decides tool order | `core/planner.py` |
+| **Research Tools** (5) | Fetches data from CRM, KB, historical docs | `tools/research.py` |
+| **Context Tools** (2) | Assembles relevant info into coherent package | `tools/context.py` |
+| **Content Tools** (5) | Generates SOW sections, hybrid reflection | `tools/content.py` |
+| **Compliance Tools** (4) | Validates output against rules | `tools/compliance.py` |
+| **Utilities** (2) | Document parsing (ingest) and DOCX export | `utils/doc_handler.py` |
+
+
 ## Tech Stack
 
 | Layer | Technology |
@@ -108,9 +155,10 @@ BEDROCK_MODEL_ID=anthropic.claude-3-5-sonnet-20241022-v2:0
 
 ## Documentation
 
-- [Implementation Plan](IMPLEMENTATION_PLAN.md) - Architecture & design
-- [Use Case Flows](USE_CASE_FLOWS.md) - Agent workflow diagrams
-- [Tasks](TASKS.md) - Implementation checklist
+- [Implementation Plan](docs/IMPLEMENTATION_PLAN.md) - Architecture & design
+- [Use Case Flows](docs/USE_CASE_FLOWS.md) - Agent workflow diagrams
+- [Tasks](docs/TASKS.md) - Implementation checklist
+- [Architecture Decisions](docs/ARCHITECTURE_DECISIONS.md) - Design decisions & rationale
 
 ## License
 
