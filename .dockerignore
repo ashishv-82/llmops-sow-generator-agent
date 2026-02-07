@@ -1,0 +1,40 @@
+# Git
+.git/
+.gitignore
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Virtual environment
+.venv/
+venv/
+ENV/
+
+# IDE
+.idea/
+.vscode/
+
+# Documentation
+*.md
+docs/
+
+# Tests (not needed in production image)
+tests/
+
+# Infrastructure
+infra/
+
+# Development files
+.env.example
+docker-compose.yml
+docker-compose.override.yml
+
+# OS files
+.DS_Store
+Thumbs.db

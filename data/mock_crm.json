@@ -1,0 +1,78 @@
+{
+    "clients": [
+        {
+            "id": "client-001",
+            "name": "Heritage Mutual Bank",
+            "industry": "Financial Services (ADI)",
+            "size": "Enterprise",
+            "compliance_tier": "HIGH",
+            "region": "APAC",
+            "contacts": [
+                {
+                    "name": "Sarah Chen",
+                    "title": "Chief Technology Officer",
+                    "email": "sarah.chen@heritagemutual.com.au",
+                    "phone": "+61 2 9000 1234",
+                    "role": "Decision Maker"
+                },
+                {
+                    "name": "Michael Wong",
+                    "title": "Head of Payments",
+                    "email": "m.wong@heritagemutual.com.au",
+                    "phone": "+61 2 9000 1235",
+                    "role": "Budget Holder"
+                }
+            ],
+            "notes": "Long-standing mutual bank client. Using Cuspac for Direct Entry (DE) and BPAY. Now looking to move to NPP/Osko for real-time payments. Sensitive to SLAs as a regulated ADI.",
+            "relationship_since": "2015",
+            "total_revenue": 4500000
+        },
+        {
+            "id": "client-002",
+            "name": "SwiftPay Fintech",
+            "industry": "Fintech / Payments",
+            "size": "Mid-Market",
+            "compliance_tier": "MEDIUM",
+            "region": "APAC",
+            "contacts": [
+                {
+                    "name": "David Park",
+                    "title": "VP of Product",
+                    "email": "d.park@swiftpay.io",
+                    "phone": "+61 3 8000 5678",
+                    "role": "Decision Maker"
+                },
+                {
+                    "name": "Lisa Thompson",
+                    "title": "Head of Engineering",
+                    "email": "l.thompson@swiftpay.io",
+                    "phone": "+61 3 8000 5679",
+                    "role": "Technical Lead"
+                }
+            ],
+            "notes": "Fast-growing B2B payment facilitator. Needs PayTo for recurring billing. Open to API-first integration. Looking for speed to market.",
+            "relationship_since": "2023",
+            "total_revenue": 1200000
+        },
+        {
+            "id": "client-003",
+            "name": "ShopNow BNPL",
+            "industry": "Retail Finance",
+            "size": "SMB",
+            "compliance_tier": "MEDIUM",
+            "region": "APAC",
+            "contacts": [
+                {
+                    "name": "Emma Rodriguez",
+                    "title": "CEO",
+                    "email": "emma@shopnow.com.au",
+                    "phone": "+61 7 3000 9012",
+                    "role": "Decision Maker"
+                }
+            ],
+            "notes": "BNPL startup needing credit assessment data via Open Banking. Price sensitive but high growth potential.",
+            "relationship_since": "2024",
+            "total_revenue": 150000
+        }
+    ]
+}

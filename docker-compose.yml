@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: infra/docker/Dockerfile
+    container_name: sow-generator-app
+    volumes:
+      - .:/app
+      - /app/.venv
+    ports:
+      - "8000:8000"  # FastAPI
+      - "8501:8501"  # Streamlit
+    env_file:
+      - .env
+    environment:
+      - CHROMA_HOST=chromadb
+      - CHROMA_PORT=8000
+    depends_on:
+      - chromadb
+    command: bash -c "uvicorn src.api.main:app --host 0.0.0.0 --port 8000 --reload & streamlit run src/ui/streamlit_app.py --server.port 8501 --server.address 0.0.0.0"
+
+  chromadb:
+    image: chromadb/chroma:latest
+    container_name: sow-generator-chroma
+    volumes:
+      - ./data/chromadb:/chroma/chroma
+    ports:
+      - "8001:8000"
+    environment:
+      - IS_PERSISTENT=TRUE

@@ -1,0 +1,64 @@
+{
+    "opportunities": [
+        {
+            "id": "opp-001",
+            "client_id": "client-001",
+            "name": "NPP & Osko Implementation",
+            "product": "Cuspac Real-Time Payments (NPP)",
+            "status": "Closed Won",
+            "value": 1500000,
+            "start_date": "2023-03-01",
+            "end_date": "2023-11-30",
+            "outcome": "Successful Go-Live. Bank is now processing Osko payments 24/7.",
+            "sow_id": "SOW-2023-001"
+        },
+        {
+            "id": "opp-002",
+            "client_id": "client-001",
+            "name": "Open Banking Data Holder Compliance",
+            "product": "Cuspac CDR & Open Banking",
+            "status": "In Progress",
+            "value": 850000,
+            "start_date": "2025-01-01",
+            "end_date": "2025-06-30",
+            "outcome": null,
+            "sow_id": "SOW-2025-001"
+        },
+        {
+            "id": "opp-003",
+            "client_id": "client-002",
+            "name": "PayTo Mandate Management",
+            "product": "Cuspac Real-Time Payments (NPP)",
+            "status": "Closed Won",
+            "value": 350000,
+            "start_date": "2024-04-01",
+            "end_date": "2024-08-30",
+            "outcome": "Successful API Integration. Processing 10k mandates/month.",
+            "sow_id": "SOW-2024-002"
+        },
+        {
+            "id": "opp-004",
+            "client_id": "client-002",
+            "name": "AI Fraud Monitor (APP Scams)",
+            "product": "Cuspac AI Fraud Monitor",
+            "status": "Proposal",
+            "value": 600000,
+            "start_date": null,
+            "end_date": null,
+            "outcome": null,
+            "sow_id": null
+        },
+        {
+            "id": "opp-005",
+            "client_id": "client-003",
+            "name": "CDR Data Enrichment (Credit Assessment)",
+            "product": "Cuspac CDR & Open Banking",
+            "status": "Closed Won",
+            "value": 120000,
+            "start_date": "2024-09-01",
+            "end_date": "2024-12-15",
+            "outcome": "Live with Basiq enrichment services.",
+            "sow_id": "SOW-2024-003"
+        }
+    ]
+}

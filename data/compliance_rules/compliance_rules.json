@@ -1,0 +1,62 @@
+{
+    "compliance_tiers": {
+        "HIGH": {
+            "sla": "99.99%",
+            "data_residency": "Must remain in country of origin",
+            "audit_logs": "Required (7 years retention)",
+            "encryption": "AES-256 at rest & transition",
+            "liability_cap": "5x annual contract value",
+            "background_checks": "Required for all staff"
+        },
+        "MEDIUM": {
+            "sla": "99.9%",
+            "data_residency": "Region-specific (e.g., APAC)",
+            "audit_logs": "Required (1 year retention)",
+            "encryption": "Industry standard",
+            "liability_cap": "2x annual contract value",
+            "background_checks": "Standard employment checks"
+        },
+        "LOW": {
+            "sla": "99.5%",
+            "data_residency": "Global cloud regions allowed",
+            "audit_logs": "Recommended",
+            "encryption": "Standard HTTPS",
+            "liability_cap": "1x annual contract value",
+            "background_checks": "Not specific"
+        }
+    },
+    "mandatory_clauses": [
+        {
+            "id": "clause-001",
+            "name": "Service Level Agreement",
+            "text": "Vendor guarantees {sla} availability during business hours.",
+            "required_for": [
+                "ALL"
+            ]
+        },
+        {
+            "id": "clause-002",
+            "name": "Data Protection",
+            "text": "Vendor shall process Customer Data in accordance with {data_residency} requirements.",
+            "required_for": [
+                "ALL"
+            ]
+        },
+        {
+            "id": "clause-003",
+            "name": "Termination for Convenience",
+            "text": "Customer may terminate this SOW for convenience with 30 days prior written notice.",
+            "required_for": [
+                "HIGH",
+                "MEDIUM"
+            ]
+        }
+    ],
+    "prohibited_terms": [
+        "guarantee 100% uptime",
+        "unlimited liability",
+        "indemnify against all claims",
+        "perpetual license",
+        "work for hire"
+    ]
+}
