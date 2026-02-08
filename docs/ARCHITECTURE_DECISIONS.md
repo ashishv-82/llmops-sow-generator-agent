@@ -11,6 +11,8 @@ This document captures all major architectural decisions made during the SOW Gen
 3. [ADR-003: Hybrid Content Generation with Reflection Pattern](#adr-003-hybrid-content-generation)
 4. [ADR-004: LLM Provider - Amazon Bedrock](#adr-004-llm-provider)
 5. [ADR-005: Prompt Management - YAML Templates](#adr-005-prompt-management)
+6. [ADR-006: Tool Organization](#adr-006-tool-organization)
+7. [ADR-007: Frontend UI Framework - Streamlit vs React](#adr-007-frontend-ui-framework)
 
 ---
 
@@ -424,6 +426,191 @@ src/agent/tools/
 
 ---
 
+## ADR-007: Frontend UI Framework
+
+**Status**: ✅ Accepted  
+**Date**: 2026-02-07  
+**Decision Makers**: Development Team
+
+### Context
+
+Need to choose frontend technology for SOW Generator UI. Options:
+- **Streamlit** (Python-based, rapid prototyping)
+- **React/Next.js** (Professional, full-featured)
+- **Backend-only** (API-first, no official UI)
+
+### Decision
+
+**Use Streamlit for Phase 3 with migration path to React if needed.**
+
+### Rationale
+
+**Phase 3 Goals**:
+- ✅ Demonstrate working end-to-end system
+- ✅ Enable internal testing
+- ✅ Validate UX flows
+- ✅ Fast iteration on features
+
+**Streamlit Advantages for MVP**:
+- ✅ **Fast development**: UI in hours vs weeks
+- ✅ **Python-native**: Same language as backend
+- ✅ **Good enough**: Sufficient for internal tools
+- ✅ **Built-in features**: Forms, file uploads, charts
+- ✅ **No frontend expertise needed**: Python developers can maintain
+
+**Architecture Design**:
+The system is **frontend-agnostic** by design:
+```
+FastAPI Backend (Port 8000)
+  ↓ RESTful API
+Streamlit UI (Port 8501) ← Can be swapped
+```
+
+**Key Principle**: Backend provides clean RESTful API that ANY frontend can consume.
+
+### Deployment Options
+
+**Option 1: Streamlit in Production** ✅ (Current Plan)
+
+**Good for:**
+- Internal business tools (employees only)
+- Demo/prototype environments
+- Small user base (<100 concurrent users)
+
+**Docker Deployment:**
+```dockerfile
+FROM python:3.11-slim
+WORKDIR /app
+COPY . .
+RUN pip install -r requirements.txt
+
+# Run both services
+CMD ["sh", "-c", "uvicorn src.api.main:app --host 0.0.0.0 --port 8000 & \
+     streamlit run src/ui/app.py --server.port 8501 --server.address 0.0.0.0"]
+```
+
+**AWS ECS:**
+- Single container running both API and UI
+- ALB routes to port 8501 (Streamlit)
+- UI calls localhost:8000 for API
+
+**Pros:**
+- ✅ Simple deployment (one container)
+- ✅ No separate build process
+- ✅ Fast iteration
+
+**Cons:**
+- ⚠️ Limited UI customization
+- ⚠️ Session management not enterprise-grade
+- ⚠️ Not ideal for external customers
+
+---
+
+**Option 2: React/Next.js** 🔄 (Future Migration)
+
+**Good for:**
+- External customer-facing portals
+- High traffic (1000+ concurrent users)
+- Custom branding requirements
+- Complex UI interactions
+- Mobile responsiveness needs
+
+**Architecture:**
+```
+Users → CloudFront → S3 (React SPA)
+                   ↓
+              API Gateway → FastAPI (ECS)
+```
+
+**Migration Steps:**
+1. Keep FastAPI backend unchanged (already RESTful)
+2. Build React frontend that calls same API
+3. Deploy static files to S3 + CloudFront
+4. Retire Streamlit
+
+**Pros:**
+- ✅ Professional, modern UI
+- ✅ Full customization
+- ✅ Better performance at scale
+- ✅ Mobile-optimized
+
+**Cons:**
+- ❌ Separate frontend repo
+- ❌ Requires frontend developers
+- ❌ Longer development time
+- ❌ More complex CI/CD
+
+### Decision Matrix
+
+| Criterion | Streamlit | React/Next.js |
+|-----------|-----------|---------------|
+| **Development Speed** | ⭐⭐⭐⭐⭐ | ⭐⭐ |
+| **UI Customization** | ⭐⭐ | ⭐⭐⭐⭐⭐ |
+| **Performance (scale)** | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| **Python Team Friendly** | ⭐⭐⭐⭐⭐ | ⭐ |
+| **Mobile Support** | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| **Deployment Complexity** | ⭐⭐⭐⭐ | ⭐⭐ |
+| **Cost (dev time)** | $$ | $$$$ |
+
+### Consequences
+
+**Positive**:
+- MVP delivered quickly
+- Internal users can test immediately
+- Backend API already production-ready
+- Easy migration path preserved
+
+**Negative**:
+- May need React later for external users
+- UI customization limited
+
+**Migration Path**:
+```
+Phase 3 (Current): Streamlit → Internal testing
+Phase 4 (Optional): React → External customers
+```
+
+**When to Migrate to React:**
+- External customers need access
+- Traffic exceeds 100 concurrent users
+- Custom branding requirements
+- Mobile app needed
+- Complex UI state management
+
+**When Streamlit is Sufficient:**
+- Internal-only tool (sales, BD teams)
+- <50 concurrent users
+- Standard workflows
+- Quick prototyping needs
+
+### Implementation
+
+**Streamlit Pages Created:**
+- `app.py` - Home/dashboard
+- `1_✍️_Generate_SOW.py` - SOW creation
+- `2_✅_Review_SOW.py` - Compliance checking
+- `3_🏢_Client_Research.py` - CRM lookup
+- `4_📦_Product_Research.py` - Product KB search
+
+**API Integration:**
+```python
+# All pages call FastAPI backend
+response = requests.post(
+    f"{API_URL}/api/v1/sow/create",
+    json=payload
+)
+```
+
+### Review Criteria
+
+Re-evaluate this decision when:
+- User base exceeds 50 concurrent users
+- External customer access requested
+- UI customization requests exceed Streamlit capabilities
+- Mobile access becomes a requirement
+
+---
+
 ## Summary of Key Decisions
 
 | Decision | Choice | Primary Rationale |
@@ -434,6 +621,7 @@ src/agent/tools/
 | **LLM Provider** | AWS Bedrock (Claude) | AWS-native + cost-effective |
 | **Prompt Management** | YAML Files | Version control + transparency |
 | **Tool Organization** | Functional Groups | Clarity + maintainability |
+| **Frontend UI** | Streamlit (MVP) → React (Optional) | Fast development + migration path |
 
 ---
 

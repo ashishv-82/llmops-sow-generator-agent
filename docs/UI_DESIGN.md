@@ -157,12 +157,12 @@ The Streamlit UI provides a clean, professional interface for SOW creation, revi
 | Purpose | Color | Usage |
 |---------|-------|-------|
 | Primary | Blue (#4A90D9) | Headers, navigation |
-| Create | Purple (#9B59B6) | SOW creation actions |
-| Review | Red (#E74C3C) | Compliance, warnings |
-| Research | Orange (#F5A623) | Search, research |
-| Product | Green (#7ED321) | Product info, success |
+| Create | Muted Purple (#6f5499) | SOW creation actions |
+| Review | Muted Red (#c0392b) | Compliance, warnings |
+| Research | Muted Orange (#d68910) | Search, research |
+| Product | Muted Green (#218c74) | Product info, success |
 | Background | Light Gray (#F5F7FA) | Page background |
-| Cards | White (#FFFFFF) | Content cards |
+| Cards | White (#FFFFFF) | Content cards (with colored headers) |
 
 ### Typography
 

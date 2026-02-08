@@ -159,6 +159,7 @@ BEDROCK_MODEL_ID=anthropic.claude-3-5-sonnet-20241022-v2:0
 - [Use Case Flows](docs/USE_CASE_FLOWS.md) - Agent workflow diagrams
 - [Tasks](docs/TASKS.md) - Implementation checklist
 - [Architecture Decisions](docs/ARCHITECTURE_DECISIONS.md) - Design decisions & rationale
+- [Audit Logging](docs/AUDIT_LOGGING.md) - Request tracking for compliance & debugging
 
 ## License
 
