@@ -53,7 +53,11 @@ class DocumentRetriever:
         # Build where clause from filters
         where = None
         if filters:
-            where = filters
+            if len(filters) > 1:
+                # Wrap multiple filters in $and operator
+                where = {"$and": [{k: v} for k, v in filters.items()]}
+            else:
+                where = filters
 
         # Query ChromaDB
         results = self.collection.query(

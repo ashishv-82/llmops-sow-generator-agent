@@ -12,8 +12,8 @@ from langchain_core.tools import tool
 
 from src.rag.retriever import DocumentRetriever
 
-# Data directory
-DATA_DIR = Path(__file__).parent.parent.parent / "data"
+# Data directory (project root / data)
+DATA_DIR = Path(__file__).parent.parent.parent.parent / "data"
 
 
 @tool

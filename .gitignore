@@ -54,6 +54,7 @@ logs/
 
 # Data (local dev only)
 data/chromadb/
+data/audit_logs/
 
 # Terraform
 infra/terraform/.terraform/

@@ -13,7 +13,7 @@ import chromadb
 from dotenv import load_dotenv
 
 # Load environment variables
-load_dotenv()
+load_dotenv(override=True)
 
 
 class Config:
@@ -36,8 +36,9 @@ class Config:
         self.aws_region = os.getenv("AWS_REGION", "ap-southeast-2")
         self.aws_profile = os.getenv("AWS_PROFILE", "default")
         self.bedrock_model_id = os.getenv(
-            "BEDROCK_MODEL_ID", "anthropic.claude-3-5-sonnet-20241022-v2:0"
+            "BEDROCK_MODEL_ID", "apac.amazon.nova-pro-v1:0"
         )
+        print(f"🚀 Using Bedrock Model ID: {self.bedrock_model_id}")
 
         # Model parameters
         self.temperature = float(os.getenv("TEMPERATURE", "0.7"))
