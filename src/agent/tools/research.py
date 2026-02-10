@@ -37,10 +37,10 @@ def search_crm(client_name: Annotated[str, "Name of the client to search for"]) 
     with open(crm_file, "r") as f:
         data = json.load(f)
 
-    # Search for client (case-insensitive partial match)
+    # Search for client (case-insensitive partial match on name or exact match on ID)
     client_name_lower = client_name.lower()
     for client in data.get("clients", []):
-        if client_name_lower in client["name"].lower():
+        if (client_name_lower in client["name"].lower()) or (client_name_lower == client["id"].lower()):
             return client
 
     return {"error": f"Client '{client_name}' not found in CRM"}

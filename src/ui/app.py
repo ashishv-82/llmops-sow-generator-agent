@@ -12,6 +12,7 @@ if str(root_path) not in sys.path:
     sys.path.append(str(root_path))
 
 from src.ui.components.styles import apply_custom_css
+from src.agent.config import config
 
 # Page config
 st.set_page_config(
@@ -36,27 +37,24 @@ pages = [
 # Navigation
 pg = st.navigation(pages)
 
+# Get model name from config and format it
+model_name = config.bedrock_model_id.upper().replace("APAC.AMAZON.", "").replace(":", " ")
+
 # Status Footer in Sidebar
 with st.sidebar:
-    st.markdown("""
-        <div class="status-footer">
-            <div style="margin-bottom: 1.5rem;">
-                <div class="status-text" style="font-size: 0.75rem;">SYSTEM STATUS</div>
-                <div style="display: flex; align-items: center; margin-top: 0.5rem;">
-                    <span class="status-dot"></span>
-                    <span style="color: rgba(16, 185, 129, 0.9); font-size: 0.875rem; letter-spacing: 0.15em; font-weight: 600;">OPERATIONAL</span>
-                </div>
-            </div>
-            <div style="margin-bottom: 1.5rem;">
-                <div class="status-text" style="font-size: 0.75rem;">AI MODEL</div>
-                <div class="status-value" style="margin-top: 0.5rem; font-size: 1rem; font-weight: 700;">NOVA_PRO</div>
-            </div>
-            <div style="margin-bottom: 1.5rem;">
-                <div class="status-text" style="font-size: 0.75rem;">RECENT ACTIVITY</div>
-                <div class="status-value" style="margin-top: 0.5rem; font-size: 1rem; font-weight: 700;">3</div>
-            </div>
-        </div>
-    """, unsafe_allow_html=True)
+    st.markdown(
+        f"""<div class="sidebar-footer">
+<!-- System Status -->
+<div class="status-section">
+<div class="status-row">
+<span class="status-dot"></span>
+<span class="status-text">All Systems Operational</span>
+</div>
+<div class="engine-info">Powered by {model_name}</div>
+</div>
+</div>""",
+        unsafe_allow_html=True
+    )
 
 # Run the app
 pg.run()

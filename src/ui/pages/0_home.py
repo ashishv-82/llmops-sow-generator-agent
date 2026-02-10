@@ -7,193 +7,102 @@ root_path = Path(__file__).parent.parent.parent.parent
 if str(root_path) not in sys.path:
     sys.path.append(str(root_path))
 
-from src.ui.components.styles import apply_custom_css, main_header
+from src.ui.components.styles import apply_custom_css
 
-# Warm Dark Mode Design System - Homepage
-st.set_page_config(page_title="SOW Generator", page_icon="📄", layout="wide")
+# Page Config
+st.set_page_config(
+    page_title="Cuscal | Select Agent", 
+    page_icon="🟥", 
+    layout="wide",
+    initial_sidebar_state="collapsed"
+)
 
 # Apply centralized styles
 apply_custom_css()
 
-# Homepage-specific CSS (only cards and layout)
+# Custom Homepage Content
 st.markdown("""
-<style>
-    /* The "Cockpit" Layout - No Scroll (Homepage specific) */
-    [data-testid="stAppViewContainer"] {
-        height: 100vh !important;
-        overflow: hidden !important;
-    }
-    
-    [data-testid="stMain"] {
-        height: 100vh !important;
-        overflow: hidden !important;
-        display: flex;
-        flex-direction: column;
-    }
-    
-    .block-container {
-        padding: 0 3rem !important;
-        max-width: 100% !important;
-        height: 100vh !important;
-        display: flex;
-        flex-direction: column;
-    }
-    
-    /* Card Styles (Homepage specific) */
-    .stealth-card {
-        background: rgba(0, 0, 0, 0.6);
-        backdrop-filter: blur(24px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 12px;
-        padding: 1.5rem;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        cursor: pointer;
-        text-decoration: none !important;
-        display: flex;
-        flex-direction: column;
-        position: relative;
-        height: 100%;
-    }
-    
-    .stealth-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 20px 60px -10px rgba(0, 0, 0, 0.5), 
-                    inset 0 0 20px rgba(255, 255, 255, 0.03);
-        border-color: rgba(255, 255, 255, 0.08);
-    }
-    
-    .stealth-card h3 {
-        margin: 1rem 0 0.75rem 0;
-        font-size: 1.875rem;
-        font-weight: 700;
-        letter-spacing: -0.025em;
-    }
-    
-    .stealth-card p {
-        margin: 0;
-        color: #a3a3a3;
-        line-height: 1.6;
-        font-size: 0.9rem;
-        min-height: 3rem;
-        flex-grow: 1;
-    }
-    
-    /* Icon Containers - Brand Red Accent */
-    .card-icon-container {
-        width: 44px;
-        height: 44px;
-        background: rgba(217, 45, 32, 0.1);
-        border: 1px solid rgba(217, 45, 32, 0.2);
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.3s ease;
-    }
-    
-    .stealth-card:hover .card-icon-container {
-        background: rgba(217, 45, 32, 0.2);
-        border-color: rgba(217, 45, 32, 0.4);
-        box-shadow: 0 0 15px rgba(217, 45, 32, 0.4);
-    }
-    
-    .card-icon-container svg {
-        width: 22px;
-        height: 22px;
-        color: #D92D20;
-    }
-    
-    /* Card Meta */
-    .card-meta {
-        margin-top: 1rem;
-        padding-top: 1rem;
-        border-top: 1px solid rgba(255, 255, 255, 0.05);
-        font-size: 0.75rem;
-        color: #737373;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-    }
-    
-    /* Card Grid - 2 Columns */
-    .card-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1.5rem;
-        margin: 1.5rem 0;
-        flex-grow: 1;
-        align-content: start;
-    }
-</style>
+<div class="cuscal-header">
+    <div class="logo-container">
+        Cuscal <span class="logo-square"></span>
+    </div>
+    <a href="#" class="login-link">Log In</a>
+</div>
+
+<div class="hero-section">
+    <div class="hero-title">Select an Agent</div>
+    <div class="hero-subtitle">
+        Enterprise-grade AI for secure workflows. Deploy specialized agents for SOW generation, auditing, and intelligence.
+    </div>
+</div>
 """, unsafe_allow_html=True)
 
-# SVG Icons
-ICON_EDIT = """<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 256 256"><path d="M227.31,73.37,182.63,28.68a16,16,0,0,0-22.63,0L36.69,152.06A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.31,96a16,16,0,0,0,0-22.63ZM92.69,208H48V163.31l88-88L180.69,120ZM192,108.68,147.31,64l24-24L216,84.68Z"></path></svg>"""
+# 4-Column Grid
+col1, col2, col3, col4 = st.columns(4)
 
-ICON_CHECKLIST = """<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 256 256"><path d="M208,32H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM173.66,98.34l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,137.37l50.34-50.35a8,8,0,0,1,11.32,11.32Z"></path></svg>"""
-
-ICON_USERS = """<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 256 256"><path d="M117.25,157.92a60,60,0,1,0-66.5,0A95.83,95.83,0,0,0,3.53,195.63a8,8,0,1,0,13.4,8.74,80,80,0,0,1,134.14,0,8,8,0,0,0,13.4-8.74A95.83,95.83,0,0,0,117.25,157.92ZM40,108a44,44,0,1,1,44,44A44.05,44.05,0,0,1,40,108Zm210.14,98.7a8,8,0,0,1-11.07-2.33A79.83,79.83,0,0,0,172,168a8,8,0,0,1,0-16,44,44,0,1,0-16.34-84.87,8,8,0,1,1-5.94-14.85,60,60,0,0,1,55.53,105.64,95.83,95.83,0,0,1,47.22,37.71A8,8,0,0,1,250.14,206.7Z"></path></svg>"""
-
-ICON_PACKAGE = """<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 256 256"><path d="M223.68,66.15,135.68,18a15.88,15.88,0,0,0-15.36,0l-88,48.17a16,16,0,0,0-8.32,14v95.64a16,16,0,0,0,8.32,14l88,48.17a15.88,15.88,0,0,0,15.36,0l88-48.17a16,16,0,0,0,8.32-14V80.18A16,16,0,0,0,223.68,66.15ZM128,32l80.34,44L128,120,47.66,76ZM40,90l80,43.78v85.79L40,175.82Zm96,129.57V133.82L216,90v85.78Z"></path></svg>"""
-
-# Header
-main_header("SOW Generator Agent", "Enterprise AI Platform for Statement of Work Automation")
-
-# Card Grid
-col1, col2 = st.columns(2)
+# ICONS (Feather Icons mostly)
+ICON_EDIT = """<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>"""
+ICON_SHIELD = """<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shield"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>"""
+ICON_BRAIN = """<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-cpu"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></svg>"""
+ICON_BOOK = """<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-book-open"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>"""
+ARROW_RIGHT = """<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>"""
 
 with col1:
-    # Card 1: Create SOW
     st.markdown(f"""
-    <a href="Generate_SOW" class="stealth-card">
-        <div class="card-icon-container">
-            {ICON_EDIT}
+    <a href="generate_sow" class="agent-card">
+        <div class="card-icon icon-sow">{ICON_EDIT}</div>
+        <div class="card-title">Create SOW</div>
+        <div class="card-description">
+            Synthesis of requirements into legal frameworks. Auto-drafting enabled for rapid deployment.
         </div>
-        <h3>Create SOW</h3>
-        <p>Generate a professional Statement of Work with AI-powered templates</p>
-        <div class="card-meta">Fastest • Production Ready</div>
-    </a>
-    """, unsafe_allow_html=True)
-    
-    # Card 3: Client Research
-    st.markdown(f"""
-    <a href="Client_Research" class="stealth-card">
-        <div class="card-icon-container">
-            {ICON_USERS}
+        <div class="card-action">
+            Start Drafting
+            <span class="card-arrow">→</span>
         </div>
-        <h3>Client Research</h3>
-        <p>Access client history, requirements, and compliance tiers from CRM</p>
-        <div class="card-meta">CRM Integrated</div>
     </a>
     """, unsafe_allow_html=True)
 
 with col2:
-    # Card 2: Review SOW
     st.markdown(f"""
-    <a href="Review_SOW" class="stealth-card">
-        <div class="card-icon-container">
-            {ICON_CHECKLIST}
+    <a href="review_sow" class="agent-card">
+        <div class="card-icon icon-audit">{ICON_SHIELD}</div>
+        <div class="card-title">Review SOW</div>
+        <div class="card-description">
+            Automated compliance scrutiny and risk audit. SLA protocol validation active.
         </div>
-        <h3>Review SOW</h3>
-        <p>Run compliance checks and validate against legal requirements</p>
-        <div class="card-meta">Compliance • Risk Analysis</div>
-    </a>
-    """, unsafe_allow_html=True)
-    
-    # Card 4: Product Research
-    st.markdown(f"""
-    <a href="Product_Research" class="stealth-card">
-        <div class="card-icon-container">
-            {ICON_PACKAGE}
+        <div class="card-action">
+            Start Audit
+            <span class="card-arrow">→</span>
         </div>
-        <h3>Product Research</h3>
-        <p>Explore product specifications and SLA requirements</p>
-        <div class="card-meta">Knowledge Base</div>
     </a>
     """, unsafe_allow_html=True)
 
-# Footer
-st.markdown("""
-<div class="footer">
-    © 2024 Enterprise AI Platform • v2.1.0 • Built with Streamlit
-</div>
-""", unsafe_allow_html=True)
+with col3:
+    st.markdown(f"""
+    <a href="client_research" class="agent-card">
+        <div class="card-icon icon-intel">{ICON_BRAIN}</div>
+        <div class="card-title">Client Research</div>
+        <div class="card-description">
+            Deep memory retrieval. Analyze transaction history & entity compatibility effortlessly.
+        </div>
+        <div class="card-action">
+            Explore Intel
+            <span class="card-arrow">→</span>
+        </div>
+    </a>
+    """, unsafe_allow_html=True)
+
+with col4:
+    st.markdown(f"""
+    <a href="product_research" class="agent-card">
+        <div class="card-icon icon-kb">{ICON_BOOK}</div>
+        <div class="card-title">Product Research</div>
+        <div class="card-description">
+            Comprehensive technical library. Search specs, APIs, and integration guides instantly.
+        </div>
+        <div class="card-action">
+            Query Base
+            <span class="card-arrow">→</span>
+        </div>
+    </a>
+    """, unsafe_allow_html=True)
