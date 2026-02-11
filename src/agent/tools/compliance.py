@@ -7,7 +7,7 @@ Validates SOWs against mandatory clauses, prohibited terms, and SLA requirements
 import json
 import re
 from pathlib import Path
-from typing import Annotated, Dict, List
+from typing import Annotated, Any, Dict, List
 
 from langchain_core.tools import tool
 
@@ -16,9 +16,9 @@ DATA_DIR = Path(__file__).parent.parent.parent.parent / "data"
 
 
 @tool
-def check_mandatory_clauses(
+def check_mandatory_clauses_v2(
     sow_text: Annotated[str, "SOW text to check"],
-    requirements: Annotated[List[str], "List of mandatory clauses"],
+    requirements: Annotated[List[Any], "List of mandatory clauses (strings or dicts)"],
 ) -> Dict:
     """
     Check if all mandatory clauses are present in the SOW.
@@ -33,7 +33,13 @@ def check_mandatory_clauses(
     missing_clauses = []
     found_clauses = []
 
-    for clause in requirements:
+    for item in requirements:
+        # Handle dict inputs (graceful degradation)
+        if isinstance(item, dict):
+            clause = item.get("name") or item.get("text") or str(item)
+        else:
+            clause = str(item)
+            
         # Case-insensitive search
         if re.search(re.escape(clause), sow_text, re.IGNORECASE):
             found_clauses.append(clause)

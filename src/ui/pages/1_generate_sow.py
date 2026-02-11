@@ -192,12 +192,12 @@ if not st.session_state.sow_result:
     # Right Pane: Status & Context
     with col_right:
         # Calculate estimates dynamically
-        est_time = "15s - 35s"
+        est_time = "1m - 2m"
         est_cost = "$0.06 - $0.23"
         model_name = "Amazon Nova Pro"
         
         if quality_mode == "quick":
-            est_time = "5s - 10s"
+            est_time = "45s - 60s"
             est_cost = "$0.01 - $0.05"
         
         # Unified SaaS Card: Job Details + Pro Tips
@@ -444,24 +444,24 @@ if st.session_state.sow_result:
         </div>
         <div style="text-align: right;">
             <div style="font-size: 1.75rem; font-weight: 700; color: #fff; line-height: 1;">{score}</div>
-            <div style="font-size: 0.7rem; color: #666; text-transform: uppercase; letter-spacing: 0.1em;">Confidence Score</div>
+            <div style="font-size: 0.7rem; color: #666; text-transform: uppercase; letter-spacing: 0.1em;">Compliance Score</div>
         </div>
     </div>
 
-    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 24px;">
-        <div style="background: rgba(5,5,5,0.4); padding: 12px; border-radius: 8px; border: 1px solid #222; text-align: center;">
-            <div style="color: #EF4444; font-weight: 700; font-size: 0.7rem; margin-bottom: 4px;">HIGH RISK</div>
-            <div style="color: #fff; font-size: 1.1rem; font-weight: 600;">{review['summary']['HIGH']}</div>
-        </div>
-        <div style="background: rgba(5,5,5,0.4); padding: 12px; border-radius: 8px; border: 1px solid #222; text-align: center;">
-            <div style="color: #F59E0B; font-weight: 700; font-size: 0.7rem; margin-bottom: 4px;">MEDIUM RISK</div>
-            <div style="color: #fff; font-size: 1.1rem; font-weight: 600;">{review['summary']['MEDIUM']}</div>
-        </div>
-        <div style="background: rgba(5,5,5,0.4); padding: 12px; border-radius: 8px; border: 1px solid #222; text-align: center;">
-            <div style="color: #10B981; font-weight: 700; font-size: 0.7rem; margin-bottom: 4px;">LOW RISK</div>
-            <div style="color: #fff; font-size: 1.1rem; font-weight: 600;">{review['summary']['LOW']}</div>
-        </div>
+<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 24px;">
+    <div style="background: rgba(5,5,5,0.4); padding: 12px; border-radius: 8px; border: 1px solid #222; text-align: center;">
+        <div style="color: #EF4444; font-weight: 700; font-size: 0.7rem; margin-bottom: 4px;">HIGH RISK</div>
+        <div style="color: #fff; font-size: 1.1rem; font-weight: 600;">{review['summary']['HIGH']}</div>
     </div>
+    <div style="background: rgba(5,5,5,0.4); padding: 12px; border-radius: 8px; border: 1px solid #222; text-align: center;">
+        <div style="color: #F59E0B; font-weight: 700; font-size: 0.7rem; margin-bottom: 4px;">MEDIUM RISK</div>
+        <div style="color: #fff; font-size: 1.1rem; font-weight: 600;">{review['summary']['MEDIUM']}</div>
+    </div>
+    <div style="background: rgba(5,5,5,0.4); padding: 12px; border-radius: 8px; border: 1px solid #222; text-align: center;">
+        <div style="color: #10B981; font-weight: 700; font-size: 0.7rem; margin-bottom: 4px;">LOW RISK</div>
+        <div style="color: #fff; font-size: 1.1rem; font-weight: 600;">{review['summary']['LOW']}</div>
+    </div>
+</div>
 </div>
 """, unsafe_allow_html=True)
         
@@ -470,6 +470,16 @@ if st.session_state.sow_result:
             st.subheader("Risk Analysis Details")
             for issue in review['issues']:
                 severity_icon = "🔴" if issue['severity'] == "HIGH" else "🟡" if issue['severity'] == "MEDIUM" else "🟢"
-                with st.expander(f"{severity_icon} {issue['category']}"):
+                
+                # Create a more descriptive label
+                label = f"{severity_icon} {issue['category']}"
+                if "Prohibited Term" in issue['category']:
+                    term = issue['description'].replace("Found prohibited term: ", "")
+                    label += f": {term}"
+                elif "Mandatory Clause" in issue['category']:
+                    clause = issue['description'].replace("Missing required clause: ", "")
+                    label += f": {clause}"
+                
+                with st.expander(label):
                     st.write(f"**Description:** {issue['description']}")
                     st.info(f"💡 **Suggestion:** {issue['suggestion']}")

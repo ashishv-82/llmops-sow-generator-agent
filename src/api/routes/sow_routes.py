@@ -15,7 +15,7 @@ from src.api.schemas import (
 from src.api.dependencies import get_sow_agent
 from src.agent.core import SOWAgent
 from src.agent.tools.compliance import (
-    check_mandatory_clauses,
+    check_mandatory_clauses_v2,
     check_prohibited_terms,
     check_sla_requirements,
 )
@@ -125,12 +125,23 @@ async def review_sow(request: SOWReviewRequest):
         
         # Check 1: Mandatory clauses
         if compliance_rules.get("mandatory_clauses"):
-            clause_check = check_mandatory_clauses.invoke({
+            # Tool expects List[str], but rules contain Dicts. Extract names.
+            mandatory_clauses = compliance_rules["mandatory_clauses"]
+            requirements = [
+                c["name"] if isinstance(c, dict) else str(c)
+                for c in mandatory_clauses
+            ]
+            
+            logger.info(f"DEBUG: Extracted {len(requirements)} requirements from rules.")
+            if requirements:
+                logger.info(f"DEBUG: First requirement type: {type(requirements[0])} val: {requirements[0]}")
+            
+            clause_check = check_mandatory_clauses_v2.invoke({
                 "sow_text": request.sow_text,
-                "requirements": compliance_rules["mandatory_clauses"],
+                "requirements": requirements,
             })
             
-            for missing in clause_check.get("missing", []):
+            for missing in clause_check.get("missing_clauses", []):
                 issues.append(
                     ComplianceIssue(
                         severity="HIGH",
@@ -145,14 +156,14 @@ async def review_sow(request: SOWReviewRequest):
             "sow_text": request.sow_text
         })
         
-        for term_info in prohibited_check.get("found", []):
+        for finding in prohibited_check.get("findings", []):
             issues.append(
                 ComplianceIssue(
                     severity="HIGH",
                     category="Prohibited Term",
-                    description=f"Found prohibited term: '{term_info['term']}'",
-                    location=f"Near: {term_info.get('context', 'N/A')}",
-                    suggestion=f"Remove or replace: {term_info['term']}",
+                    description=f"Found prohibited term: '{finding['term']}'",
+                    location=f"Near: {finding.get('context', 'N/A')}",
+                    suggestion=f"Remove or replace: {finding['term']}",
                 )
             )
         
@@ -161,15 +172,17 @@ async def review_sow(request: SOWReviewRequest):
             sla_check = check_sla_requirements.invoke({
                 "sow_text": request.sow_text,
                 "product": request.product,
+                "client_tier": request.client_tier or "MEDIUM",
             })
             
-            for missing_sla in sla_check.get("missing", []):
+            for finding in sla_check.get("findings", []):
                 issues.append(
                     ComplianceIssue(
-                        severity="MEDIUM",
+                        severity=finding.get("severity", "MEDIUM"),
                         category="SLA",
-                        description=f"Missing SLA: {missing_sla}",
-                        suggestion=f"Add SLA commitment for: {missing_sla}",
+                        description=finding.get("issue", "SLA violation"),
+                        location=finding.get("location", "SLA Section"),
+                        suggestion=finding.get("suggestion", "Review SLA terms"),
                     )
                 )
         

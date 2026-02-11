@@ -1,7 +1,7 @@
 """Tool module initialization - exports all tools."""
 
 from src.agent.tools.compliance import (
-    check_mandatory_clauses,
+    check_mandatory_clauses_v2,
     check_prohibited_terms,
     check_sla_requirements,
     generate_compliance_report,
@@ -40,7 +40,7 @@ ALL_TOOLS = [
     revise_section,
     generate_summary,
     # Compliance tools
-    check_mandatory_clauses,
+    check_mandatory_clauses_v2,
     check_prohibited_terms,
     check_sla_requirements,
     generate_compliance_report,

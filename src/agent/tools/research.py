@@ -190,10 +190,18 @@ def search_compliance_kb(
     # Get requirements for tier
     tier_requirements = data.get("sla_requirements_by_tier", {}).get(client_tier, {})
 
+    # Filter mandatory clauses for tier
+    all_clauses = data.get("mandatory_clauses", [])
+    relevant_clauses = []
+    for c in all_clauses:
+        req_for = c.get("required_for", [])
+        if "ALL" in req_for or client_tier in req_for:
+            relevant_clauses.append(c)
+
     response = {
         "client_tier": client_tier,
         "sla_requirements": tier_requirements,
-        "mandatory_clauses": data.get("mandatory_clauses", []),
+        "mandatory_clauses": relevant_clauses,
         "prohibited_terms": data.get("prohibited_terms", []),
     }
 
