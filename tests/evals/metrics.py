@@ -9,7 +9,7 @@ Provides metrics for assessing:
 
 import re
 from collections import defaultdict
-from typing import Any, Dict, List, Tuple
+from typing import Any
 
 # ====================
 # SOW Generation Metrics

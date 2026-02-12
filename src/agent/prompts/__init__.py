@@ -1,7 +1,7 @@
 """Prompt loading utilities."""
 
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 import yaml
 

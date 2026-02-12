@@ -197,7 +197,6 @@ async def review_sow(request: SOWReviewRequest):
             summary[issue.severity] += 1
 
         # Calculate compliance score (0-100)
-        total_issues = len(issues)
         high_issues = summary["HIGH"]
         medium_issues = summary["MEDIUM"]
 
