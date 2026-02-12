@@ -1,0 +1,95 @@
+[
+    {
+        "test_id": "research_001",
+        "description": "Known client with full data",
+        "tool": "search_crm",
+        "input": {
+            "client_name": "Acme Financial Services"
+        },
+        "expected_found": true,
+        "expected_fields": [
+            "id",
+            "name",
+            "industry",
+            "size",
+            "tier"
+        ],
+        "expected_values": {
+            "id": "CLIENT-001",
+            "name": "Acme Financial Services",
+            "industry": "Banking"
+        }
+    },
+    {
+        "test_id": "research_002",
+        "description": "Unknown client - should handle gracefully",
+        "tool": "search_crm",
+        "input": {
+            "client_name": "NonExistent Corp"
+        },
+        "expected_found": false,
+        "expected_error_handling": "graceful"
+    },
+    {
+        "test_id": "research_003",
+        "description": "Known product with documentation",
+        "tool": "search_product_kb",
+        "input": {
+            "product": "Real-Time Payments"
+        },
+        "expected_found": true,
+        "expected_fields": [
+            "name",
+            "category",
+            "features"
+        ],
+        "expected_keywords": [
+            "payment",
+            "real-time",
+            "banking"
+        ]
+    },
+    {
+        "test_id": "research_004",
+        "description": "Client opportunities retrieval",
+        "tool": "search_opportunities",
+        "input": {
+            "client_id": "CLIENT-001"
+        },
+        "expected_found": true,
+        "expected_min_results": 1,
+        "expected_fields": [
+            "id",
+            "name",
+            "status",
+            "value"
+        ]
+    },
+    {
+        "test_id": "research_005",
+        "description": "Historical SOWs for client",
+        "tool": "search_historical_sows",
+        "input": {
+            "client_id": "CLIENT-001",
+            "product": "Real-Time Payments"
+        },
+        "expected_found": true,
+        "expected_min_results": 1,
+        "relevance_threshold": 0.7
+    },
+    {
+        "test_id": "research_006",
+        "description": "Compliance rules for product",
+        "tool": "search_compliance_kb",
+        "input": {
+            "product": "Real-Time Payments",
+            "client_tier": "HIGH"
+        },
+        "expected_found": true,
+        "expected_fields": [
+            "mandatory_clauses",
+            "prohibited_terms",
+            "sla_requirements"
+        ]
+    }
+]

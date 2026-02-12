@@ -1,0 +1,147 @@
+[
+    {
+        "test_id": "sow_gen_001",
+        "description": "Enterprise banking client with real-time payments and strict compliance",
+        "input": {
+            "client_id": "CLIENT-001",
+            "product": "Real-Time Payments",
+            "requirements": "99.9% uptime SLA, PCI-DSS compliance, 24/7 support, migration from legacy system"
+        },
+        "expected_sections": [
+            "Executive Summary",
+            "Scope of Work",
+            "Deliverables",
+            "Timeline",
+            "Service Level Agreement",
+            "Pricing",
+            "Security & Compliance"
+        ],
+        "expected_keywords": [
+            "PCI-DSS",
+            "uptime",
+            "real-time",
+            "99.9%",
+            "migration",
+            "24/7",
+            "support"
+        ],
+        "compliance_checks": [
+            "mandatory_clauses",
+            "prohibited_terms",
+            "sla_requirements"
+        ],
+        "min_words": 800,
+        "max_words": 3000
+    },
+    {
+        "test_id": "sow_gen_002",
+        "description": "SMB client with basic fraud detection service",
+        "input": {
+            "client_id": "CLIENT-003",
+            "product": "Fraud Detection Platform",
+            "requirements": "Basic implementation, limited customization"
+        },
+        "expected_sections": [
+            "Executive Summary",
+            "Scope of Work",
+            "Deliverables",
+            "Timeline"
+        ],
+        "expected_keywords": [
+            "fraud",
+            "detection",
+            "implementation",
+            "basic"
+        ],
+        "compliance_checks": [
+            "mandatory_clauses"
+        ],
+        "min_words": 500,
+        "max_words": 2000
+    },
+    {
+        "test_id": "sow_gen_003",
+        "description": "Healthcare client with HIPAA compliance requirements",
+        "input": {
+            "client_id": "CLIENT-005",
+            "product": "Data Analytics Platform",
+            "requirements": "HIPAA compliance, encrypted data storage, audit logging"
+        },
+        "expected_sections": [
+            "Executive Summary",
+            "Scope of Work",
+            "Deliverables",
+            "Timeline",
+            "Security & Compliance",
+            "Data Privacy"
+        ],
+        "expected_keywords": [
+            "HIPAA",
+            "encryption",
+            "audit",
+            "healthcare",
+            "privacy",
+            "protected health information"
+        ],
+        "compliance_checks": [
+            "mandatory_clauses",
+            "prohibited_terms"
+        ],
+        "min_words": 800,
+        "max_words": 3000
+    },
+    {
+        "test_id": "sow_gen_004",
+        "description": "Financial services client with custom integration needs",
+        "input": {
+            "client_id": "CLIENT-002",
+            "product": "Payment Processing Gateway",
+            "requirements": "Custom API integration, multi-currency support, 99.95% uptime"
+        },
+        "expected_sections": [
+            "Executive Summary",
+            "Scope of Work",
+            "Deliverables",
+            "Timeline",
+            "Service Level Agreement",
+            "Integration Requirements"
+        ],
+        "expected_keywords": [
+            "API",
+            "integration",
+            "multi-currency",
+            "payment",
+            "gateway",
+            "99.95%"
+        ],
+        "compliance_checks": [
+            "mandatory_clauses",
+            "sla_requirements"
+        ],
+        "min_words": 700,
+        "max_words": 2500
+    },
+    {
+        "test_id": "sow_gen_005",
+        "description": "Edge case - minimal client information provided",
+        "input": {
+            "client_id": "CLIENT-999",
+            "product": "Cloud Infrastructure",
+            "requirements": null
+        },
+        "expected_sections": [
+            "Executive Summary",
+            "Scope of Work",
+            "Deliverables"
+        ],
+        "expected_keywords": [
+            "cloud",
+            "infrastructure"
+        ],
+        "compliance_checks": [
+            "mandatory_clauses"
+        ],
+        "min_words": 400,
+        "max_words": 1500
+    }
+]

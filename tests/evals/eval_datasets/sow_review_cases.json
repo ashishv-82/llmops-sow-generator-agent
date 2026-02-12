@@ -1,0 +1,96 @@
+[
+    {
+        "test_id": "review_001",
+        "description": "Clean SOW - should pass with high score",
+        "sow_text": "# Statement of Work\n\n## Executive Summary\nAcme Financial Services has engaged us to implement our Real-Time Payments solution.\n\n## Scope of Work\nWe will deliver a fully functional real-time payment processing system.\n\n## Deliverables\n1. Payment processing engine\n2. API integration layer\n3. Admin dashboard\n4. Documentation\n\n## Timeline\nPhase 1: Planning (2 weeks)\nPhase 2: Development (8 weeks)\nPhase 3: Testing (2 weeks)\nPhase 4: Deployment (1 week)\n\n## Service Level Agreement\n- 99.9% uptime guarantee\n- Response time < 200ms for 95% of transactions\n- 24/7 support\n\n## Pricing\nTotal project cost: $250,000\nMonthly maintenance: $5,000\n\n## Liability Limitations\nOur liability is limited to the fees paid in the 12 months preceding the claim.\n\n## Termination Clause\nEither party may terminate with 30 days written notice.\n\n## Acceptance Criteria\nSystem must process 1000 transactions per second in production environment.",
+        "product": "Real-Time Payments",
+        "client_tier": "HIGH",
+        "expected_issues": [],
+        "expected_score_range": [
+            90,
+            100
+        ],
+        "expected_status": "PASS"
+    },
+    {
+        "test_id": "review_002",
+        "description": "Missing mandatory liability clause",
+        "sow_text": "# Statement of Work\n\n## Executive Summary\nAcme Corp needs fraud detection.\n\n## Scope of Work\nImplement fraud detection platform.\n\n## Deliverables\n1. Fraud detection engine\n2. Dashboard\n\n## Timeline\n4 weeks total\n\n## Pricing\n$50,000",
+        "product": "Fraud Detection Platform",
+        "client_tier": "MEDIUM",
+        "expected_issues": [
+            {
+                "severity": "HIGH",
+                "category": "Mandatory Clause",
+                "description_contains": "liability"
+            }
+        ],
+        "expected_score_range": [
+            60,
+            75
+        ],
+        "expected_status": "WARNING"
+    },
+    {
+        "test_id": "review_003",
+        "description": "Contains prohibited term 'unlimited liability'",
+        "sow_text": "# Statement of Work\n\n## Executive Summary\nPayment gateway implementation.\n\n## Scope\nImplement payment processing.\n\n## Deliverables\n1. Gateway\n\n## Liability\nVendor accepts unlimited liability for all damages.",
+        "product": "Payment Processing Gateway",
+        "client_tier": "HIGH",
+        "expected_issues": [
+            {
+                "severity": "HIGH",
+                "category": "Prohibited Term",
+                "description_contains": "unlimited"
+            }
+        ],
+        "expected_score_range": [
+            50,
+            70
+        ],
+        "expected_status": "FAIL"
+    },
+    {
+        "test_id": "review_004",
+        "description": "SLA violation - uptime below threshold",
+        "sow_text": "# Statement of Work\n\n## Executive Summary\nReal-time payments for banking client.\n\n## Scope\nPayment processing system.\n\n## Deliverables\n1. Processing engine\n2. API\n\n## Service Level Agreement\n- 95% uptime\n- Best effort support\n\n## Liability Limitations\nLimited to fees paid.\n\n## Termination\n30 days notice.",
+        "product": "Real-Time Payments",
+        "client_tier": "HIGH",
+        "expected_issues": [
+            {
+                "severity": "HIGH",
+                "category": "SLA",
+                "description_contains": "uptime"
+            }
+        ],
+        "expected_score_range": [
+            65,
+            80
+        ],
+        "expected_status": "WARNING"
+    },
+    {
+        "test_id": "review_005",
+        "description": "Multiple issues - missing clauses and prohibited terms",
+        "sow_text": "# Statement of Work\n\n## Summary\nWe will build stuff.\n\n## What We'll Do\nBuild the thing.\n\n## Cost\n$100,000\n\nWe guarantee perfect results and accept full responsibility for any issues whatsoever.",
+        "product": "Data Analytics Platform",
+        "client_tier": "MEDIUM",
+        "expected_issues": [
+            {
+                "severity": "HIGH",
+                "category": "Mandatory Clause",
+                "description_contains": "deliverables"
+            },
+            {
+                "severity": "HIGH",
+                "category": "Prohibited Term",
+                "description_contains": "guarantee"
+            }
+        ],
+        "expected_score_range": [
+            30,
+            55
+        ],
+        "expected_status": "FAIL"
+    }
+]

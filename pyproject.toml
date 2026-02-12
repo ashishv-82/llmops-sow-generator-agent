@@ -42,7 +42,7 @@ line-length = 100
 target-version = ["py311"]
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
+testpaths = ["tests/unit", "tests/integration"]
 asyncio_mode = "auto"
 
 [tool.mypy]
