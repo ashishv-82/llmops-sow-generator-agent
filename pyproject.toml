@@ -54,6 +54,7 @@ target-version = ["py311"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests/unit", "tests/integration"]
+pythonpath = ["."]
 asyncio_mode = "auto"
 
 [tool.mypy]

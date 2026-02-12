@@ -4,7 +4,7 @@ Pydantic schemas for API request and response models.
 
 from typing import Any
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 # ============================================================================
 # SOW Creation Schemas
@@ -22,8 +22,8 @@ class SOWCreateRequest(BaseModel):
         description="Generation mode: 'quick' (15s, $0.06) or 'production' (35s, $0.23)",
     )
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "client_id": "CLIENT-001",
                 "product": "Real-Time Payments",
@@ -31,6 +31,7 @@ class SOWCreateRequest(BaseModel):
                 "quality_mode": "production",
             }
         }
+    )
 
 
 class SOWCreateResponse(BaseModel):
@@ -43,8 +44,8 @@ class SOWCreateResponse(BaseModel):
     llm_calls: int = Field(..., description="Number of LLM calls made")
     quality_mode: str = Field(..., description="Mode used for generation")
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "sow_text": "# Statement of Work\n\n## Executive Summary...",
                 "metadata": {
@@ -58,6 +59,7 @@ class SOWCreateResponse(BaseModel):
                 "quality_mode": "production",
             }
         }
+    )
 
 
 # ============================================================================
@@ -74,14 +76,15 @@ class SOWReviewRequest(BaseModel):
         None, description="Client tier (HIGH/MEDIUM/LOW) for compliance rules"
     )
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "sow_text": "# Statement of Work\n\nAcme Corp...",
                 "product": "Real-Time Payments",
                 "client_tier": "HIGH",
             }
         }
+    )
 
 
 class ComplianceIssue(BaseModel):
@@ -102,8 +105,8 @@ class SOWReviewResponse(BaseModel):
     issues: list[ComplianceIssue] = Field(..., description="List of issues found")
     summary: dict[str, int] = Field(..., description="Issue count by severity")
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "compliance_score": 85,
                 "status": "WARNING",
@@ -119,6 +122,7 @@ class SOWReviewResponse(BaseModel):
                 "summary": {"HIGH": 2, "MEDIUM": 1, "LOW": 0},
             }
         }
+    )
 
 
 # ============================================================================
@@ -132,8 +136,7 @@ class ClientResearchRequest(BaseModel):
     client_name: str | None = Field(None, description="Client name (partial match)")
     client_id: str | None = Field(None, description="Exact client ID")
 
-    class Config:
-        json_schema_extra = {"example": {"client_name": "Acme"}}
+    model_config = ConfigDict(json_schema_extra={"example": {"client_name": "Acme"}})
 
 
 class ClientResearchResponse(BaseModel):
@@ -143,8 +146,8 @@ class ClientResearchResponse(BaseModel):
     opportunities: list[dict[str, Any]] = Field(..., description="Past opportunities")
     historical_sows: list[dict[str, Any]] = Field(..., description="Historical SOWs")
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "client_data": {
                     "id": "CLIENT-001",
@@ -158,6 +161,7 @@ class ClientResearchResponse(BaseModel):
                 ],
             }
         }
+    )
 
 
 class ProductResearchRequest(BaseModel):
@@ -165,8 +169,7 @@ class ProductResearchRequest(BaseModel):
 
     product_name: str = Field(..., description="Product name")
 
-    class Config:
-        json_schema_extra = {"example": {"product_name": "Real-Time Payments"}}
+    model_config = ConfigDict(json_schema_extra={"example": {"product_name": "Real-Time Payments"}})
 
 
 class ProductResearchResponse(BaseModel):
@@ -176,8 +179,8 @@ class ProductResearchResponse(BaseModel):
     features: list[str] = Field(..., description="Key features")
     requirements: dict[str, Any] = Field(..., description="Technical requirements")
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "product_info": {
                     "name": "Real-Time Payments",
@@ -195,6 +198,7 @@ class ProductResearchResponse(BaseModel):
                 },
             }
         }
+    )
 
 
 # ============================================================================
