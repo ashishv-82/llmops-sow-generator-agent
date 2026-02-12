@@ -5,20 +5,29 @@ from fastapi.testclient import TestClient
 
 from src.api.main import app
 
-# Create the test client once
-# The bedrock_runtime mock is applied at the module level
-with patch("src.agent.config.Config.bedrock_runtime", new_callable=lambda: MagicMock()):
-    client = TestClient(app)
+
+@pytest.fixture(scope="module", autouse=True)
+def mock_sow_agent_instance():
+    """Mock SOWAgent instance for all API endpoint tests to avoid AWS setup."""
+    mock_agent = MagicMock()
+    with patch("src.agent.core.planner.get_agent", return_value=mock_agent):
+        yield mock_agent
 
 
-def test_health_check():
+@pytest.fixture(scope="module")
+def client():
+    """Create FastAPI test client."""
+    return TestClient(app)
+
+
+def test_health_check(client):
     response = client.get("/api/v1/health")
     assert response.status_code == 200
     assert response.json()["status"] == "healthy"
 
 
 @patch("src.agent.core.planner.SOWAgent.run")
-def test_create_sow_endpoint(mock_run):
+def test_create_sow_endpoint(mock_run, client):
     mock_run.return_value = "# Generated SOW\n\nContent..."
 
     payload = {"client_id": "CLIENT-001", "product": "Product X", "requirements": "Standard terms"}
@@ -40,7 +49,7 @@ def test_create_sow_endpoint(mock_run):
 
 
 @patch("src.agent.tools.research.search_crm.func")
-def test_research_client_endpoint(mock_search):
+def test_research_client_endpoint(mock_search, client):
     mock_search.return_value = {"name": "Test Client", "industry": "Tech"}
 
     payload = {"client_name": "Test Client"}
@@ -52,7 +61,7 @@ def test_research_client_endpoint(mock_search):
 
 
 @patch("src.agent.tools.research.search_product_kb.func")
-def test_research_product_endpoint(mock_search):
+def test_research_product_endpoint(mock_search, client):
     mock_search.return_value = {
         "product": "Prod Y",
         "content": "Info",
