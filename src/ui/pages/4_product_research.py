@@ -25,16 +25,8 @@ main_header(
     "Query the product knowledge base for features, pricing, and technical specs."
 )
 
-# API endpoint (hidden in sidebar)
-with st.sidebar:
-    st.header("Configuration")
-    API_URL = st.text_input(
-        "API URL",
-        value="http://localhost:8000",
-        help="FastAPI backend URL"
-    )
-
-st.markdown("---")
+# API Configuration
+API_URL = "http://localhost:8000"
 
 import json
 
@@ -82,23 +74,54 @@ if submit_product:
                     result = response.json()
                     p_info = result.get('product_info', {})
                     
-                    st.markdown(f"## 📦 {p_info.get('name', 'Product')}")
+                    # --- HERO SECTION ---
+                    cat = p_info.get('category', 'N/A')
+                    # Color code category pill if possible (mock logic)
+                    cat_pill = "pill-amber" if "Security" in cat else "pill-green" if "Payments" in cat else "pill-grey"
                     
-                    col1, col2, col3 = st.columns(3)
-                    col1.metric("Category", p_info.get('category', 'N/A'))
-                    col2.metric("Pricing", p_info.get('pricing_model', 'N/A'))
-                    col3.metric("SLA Tier", "High Availability") # Mock data usually
+                    st.markdown(f"""
+                    <div style="margin-bottom: 2rem;">
+                        <h1 style="font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; align-items: center; display: flex; gap: 1rem;">
+                            {p_info.get('name', 'Product')}
+                            <span class="status-pill {cat_pill}">{cat}</span>
+                        </h1>
+                        <p style="color: #737373; font-size: 1.1rem;">{p_info.get('description', '')}</p>
+                    </div>
+                    """, unsafe_allow_html=True)
                     
-                    st.markdown("---")
+                    # --- METRICS CARD ---
+                    # Using the same glass-metrics-card class
+                    st.markdown(f"""
+                    <div class="glass-metrics-card">
+                        <div>
+                            <span class="hero-metric-label">Pricing Model</span>
+                            <span class="hero-metric-value" style="font-size: 1rem;">{p_info.get('pricing_model', 'N/A')}</span>
+                        </div>
+                        <div>
+                            <span class="hero-metric-label">SLA Tier</span>
+                            <span class="hero-metric-value">{p_info.get('sla_tier', 'Standard')}</span>
+                        </div>
+                        <div>
+                            <span class="hero-metric-label">Source</span>
+                            <span class="hero-metric-value" style="font-size: 1rem; color: #888;">Knowledge Base</span>
+                        </div>
+                    </div>
+                    """, unsafe_allow_html=True)
                     
-                    col_feat, col_req = st.columns(2)
+                    # --- DETAILS GRID ---
+                    col_feat, col_req = st.columns(2, gap="large")
                     
                     with col_feat:
-                        st.markdown("### ✨ Features")
+                        st.markdown("### ✨ Key Features")
                         features = result.get('features', [])
                         if features:
                             for f in features:
-                                st.markdown(f"- {f}")
+                                # Using a card-like style for list items
+                                st.markdown(f"""
+                                <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 10px 14px; border-radius: 6px; margin-bottom: 8px; color: #ddd; font-size: 0.9rem;">
+                                    {f}
+                                </div>
+                                """, unsafe_allow_html=True)
                         else:
                             st.info("No features listed.")
                             
@@ -107,7 +130,13 @@ if submit_product:
                         reqs = result.get('requirements', {})
                         if reqs:
                             for k, v in reqs.items():
-                                st.markdown(f"**{k.replace('_', ' ').title()}**: {v}")
+                                key_fmt = k.replace('_', ' ').title()
+                                st.markdown(f"""
+                                <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                    <span style="color: #737373; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">{key_fmt}</span>
+                                    <span style="color: #fff; font-weight: 500; text-align: right; max-width: 60%;">{v}</span>
+                                </div>
+                                """, unsafe_allow_html=True)
                         else:
                             st.info("No requirements listed.")
                             

@@ -182,7 +182,7 @@ def apply_custom_css():
             color: white !important;
         }
         
-        .stButton > button[kind="primary"] {
+        .stButton > button[kind="primary"], div[data-testid="stFormSubmitButton"] button {
             background-color: var(--accent-red) !important;
             border: none !important;
             color: white !important;
@@ -306,7 +306,6 @@ def apply_custom_css():
             font-size: 0.85rem;
             color: #fff;
             font-weight: 500;
-            font-family: 'Courier New', monospace;
         }
 
         .tip-group {
@@ -356,7 +355,6 @@ def apply_custom_css():
         }
 
         .telemetry-tag {
-            font-family: 'Courier New', monospace;
             font-size: 0.7rem;
             color: #10B981;
             background: rgba(16, 185, 129, 0.1);
@@ -397,7 +395,162 @@ def apply_custom_css():
             100% { opacity: 1; transform: scale(1); }
         }
 
-        </style>
+        /* CLIENT RESEARCH: HERO METRICS */
+        .glass-metrics-card {
+            background: rgba(255, 255, 255, 0.05); /* bg-white/5 */
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            align-items: center;
+        }
+
+        .hero-metric-label {
+            font-size: 0.75rem; /* text-xs */
+            text-transform: uppercase;
+            color: #737373; /* text-neutral-500 */
+            letter-spacing: 0.05em; /* tracking-wider */
+            margin-bottom: 0.25rem;
+            display: block;
+        }
+
+        .hero-metric-value {
+            font-size: 1.25rem; /* text-xl */
+            font-weight: 500;
+            color: #FFFFFF;
+            line-height: 1.2;
+        }
+
+        /* CLIENT RESEARCH: PILLS */
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2px 8px; /* py-1 px-2 */
+            border-radius: 9999px; /* rounded-full */
+            font-size: 0.75rem; /* text-xs */
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            white-space: nowrap;
+        }
+
+        .pill-red-outline {
+            border: 1px solid rgba(239, 68, 68, 0.5); /* border-red-500/50 */
+            color: #F87171; /* text-red-400 */
+            background: transparent;
+        }
+        
+        .pill-green {
+            background: rgba(16, 185, 129, 0.1);
+            color: #34D399; /* Emerald 400 */
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .pill-amber {
+            background: rgba(245, 158, 11, 0.1);
+            color: #FBBF24; /* Amber 400 */
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .pill-grey {
+            background: rgba(115, 115, 115, 0.1);
+            color: #A3A3A3; /* Neutral 400 */
+            border: 1px solid rgba(115, 115, 115, 0.2);
+        }
+
+        /* CLIENT RESEARCH: USER CARDS */
+        .user-card {
+            background-color: #111111; /* bg-[#111] */
+            border: 1px solid rgba(255, 255, 255, 0.05); /* border-white/5 */
+            border-radius: 6px;
+            padding: 0.75rem; /* p-3 */
+            display: flex;
+            align-items: center;
+            gap: 1rem; /* gap-4 */
+            margin-bottom: 0.5rem;
+        }
+
+        .avatar-circle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #262626; /* neutral-800 */
+            color: #A3A3A3; /* neutral-400 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.3;
+        }
+
+        .user-name {
+            color: #FFFFFF;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .user-role {
+            color: #737373; /* neutral-500 */
+            font-size: 0.8rem; /* text-sm equivalent roughly */
+        }
+
+        /* CLIENT RESEARCH: OPPORTUNITY LIST */
+        .opp-list {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .opp-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05); /* border-white/5 */
+        }
+
+        .opp-row:last-child {
+            border-bottom: none;
+        }
+
+        .opp-main {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .opp-title {
+            color: #FFFFFF;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .opp-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            color: #737373;
+        }
+
+        .opp-value {
+            font-size: 1rem;
+            color: #FFFFFF;
+            font-weight: 600;
+            text-align: right;
+            min-width: 100px;
+        }
         """,
         unsafe_allow_html=True,
     )

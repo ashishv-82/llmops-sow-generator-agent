@@ -386,42 +386,6 @@ if st.session_state.sow_result:
         if st.button("Copy Text", use_container_width=True):
             st.toast("Text copied!")
     st.markdown('</div>', unsafe_allow_html=True)
-    
-    # Border-flush divider
-    st.markdown("""
-<div style="background: #111; border: 1px solid #222; border-top: none; border-radius: 0 0 12px 12px; height: 1px; margin-top: -1px; margin-bottom: 0;"></div>
-""", unsafe_allow_html=True)
-
-    # 3. Document Canvas (No gap between header and canvas)
-    st.markdown(f"""
-<div class="document-canvas" style="border-top: none; border-radius: 0 0 12px 12px; margin-top: -1px;">
-{result['sow_text']}
-</div>
-""", unsafe_allow_html=True)
-    
-    st.markdown("<br><br>", unsafe_allow_html=True)
-    
-    # Compliance check logic (Stores to session state)
-    if compliance_check:
-        with st.spinner("Checking compliance..."):
-            try:
-                review_response = requests.post(
-                    f"{API_URL}/api/v1/sow/review",
-                    json={
-                        "sow_text": result['sow_text'],
-                        "product": product_val,
-                        "client_tier": tier_val
-                    }
-                )
-                
-                if review_response.status_code == 200:
-                    st.session_state.compliance_report = review_response.json()
-                    st.rerun()
-                else:
-                    st.error(f"❌ Error: {review_response.status_code} - {review_response.text}")
-                    
-            except Exception as e:
-                st.error(f"❌ Error during compliance check: {str(e)}")
 
     # Render Compliance Report if it exists in session state
     if st.session_state.compliance_report:
@@ -431,7 +395,7 @@ if st.session_state.sow_result:
         
         # Modern Compliance Report Card
         st.markdown(f"""
-<div class="saas-card" style="border-left: 4px solid #D92D20; background: rgba(217, 45, 32, 0.03);">
+<div class="saas-card" style="border-left: 4px solid #D92D20; background: rgba(217, 45, 32, 0.03); margin-top: 2rem; margin-bottom: 2rem;">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
         <div style="display: flex; align-items: center; gap: 12px;">
             <div style="background: rgba(217, 45, 32, 0.1); color: #D92D20; width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
@@ -483,3 +447,40 @@ if st.session_state.sow_result:
                 with st.expander(label):
                     st.write(f"**Description:** {issue['description']}")
                     st.info(f"💡 **Suggestion:** {issue['suggestion']}")
+    
+    # Border-flush divider
+    st.markdown("""
+<div style="background: #111; border: 1px solid #222; border-top: none; border-radius: 0 0 12px 12px; height: 1px; margin-top: -1px; margin-bottom: 0;"></div>
+""", unsafe_allow_html=True)
+
+    # 3. Document Canvas (No gap between header and canvas)
+    st.markdown(f"""
+<div class="document-canvas" style="border-top: none; border-radius: 0 0 12px 12px; margin-top: -1px;">
+{result['sow_text']}
+</div>
+""", unsafe_allow_html=True)
+    
+    st.markdown("<br><br>", unsafe_allow_html=True)
+    
+    # Compliance check logic (Stores to session state)
+    if compliance_check:
+        with st.spinner("Checking compliance..."):
+            try:
+                review_response = requests.post(
+                    f"{API_URL}/api/v1/sow/review",
+                    json={
+                        "sow_text": result['sow_text'],
+                        "product": product_val,
+                        "client_tier": tier_val
+                    }
+                )
+                
+                if review_response.status_code == 200:
+                    st.session_state.compliance_report = review_response.json()
+                    st.rerun()
+                else:
+                    st.error(f"❌ Error: {review_response.status_code} - {review_response.text}")
+                    
+            except Exception as e:
+                st.error(f"❌ Error during compliance check: {str(e)}")
+

@@ -1,0 +1,87 @@
+{
+    "products": [
+        {
+            "name": "Cuspac Real-Time Payments (NPP)",
+            "aliases": [
+                "NPP",
+                "Osko",
+                "Real-Time Payments",
+                "PayTo"
+            ],
+            "category": "Payments Infrastructure",
+            "pricing_model": "Volume-based Tiered Pricing",
+            "description": "Enterprise-grade gateway for the New Payments Platform (NPP), enabling 24/7/365 real-time clearing and settlement. Supports Osko, PayID, and PayTo services with sub-second latency.",
+            "features": [
+                "24/7 Real-Time Clearing & Settlement (NPP Native)",
+                "Osko Receive & Send support with overlay service integration",
+                "PayTo support for real-time direct debit authorities",
+                "ISO 20022 native messaging format",
+                "High-availability active-active architecture (99.999% SLA)",
+                "Integrated liquidity management and settlement reporting"
+            ],
+            "technical_requirements": {
+                "connectivity": "Direct Connect via BT Radianz or Swift",
+                "api_standards": "RESTful API (OpenAPI 3.0)",
+                "security": "mTLS 1.2+, OAuth 2.0, FIPS 140-2 HSM",
+                "hosting": "Hybrid Cloud (AWS Outposts compatible) or On-Premise",
+                "support": "24/7 Dedicated SRE Squad"
+            },
+            "sla_tier": "Critical Infrastructure"
+        },
+        {
+            "name": "Cuspac CDR & Open Banking",
+            "aliases": [
+                "CDR",
+                "Open Banking",
+                "Data Holder",
+                "Consumer Data Right"
+            ],
+            "category": "Compliance & Data",
+            "pricing_model": "Monthly License + API Call Volume",
+            "description": "Comprehensive solution for Data Holders to meet Consumer Data Right (CDR) obligations. Includes consent management, API gateway, and conformant data schemas for banking products.",
+            "features": [
+                "Full compliance with ACCC Consumer Data Standards (v5.0+)",
+                "Consent Management Dashboard for customer control",
+                "Automated CTS (Conformance Test Suite) reporting",
+                "Dynamic Client Registration (DCR) handling",
+                "Granular scope management (Bank Basic, Bank Detailed, etc.)",
+                "Built-in FAPI Security Profile enforcement"
+            ],
+            "technical_requirements": {
+                "identity_provider": "OIDC Compliant IdP (e.g., Okta, Auth0, Ping)",
+                "certificate_managent": "Automated ACCC Certificate rotation",
+                "database": "PostgreSQL 13+ or Oracle 19c",
+                "security": "FAPI 1.0 Advanced, MTLS",
+                "deployment": "Containerized (Kubernetes/Helm Charts)"
+            },
+            "sla_tier": "High Availability"
+        },
+        {
+            "name": "Cuspac AI Fraud Monitor",
+            "aliases": [
+                "Fraud Monitor",
+                "AI Fraud",
+                "Scam Detection",
+                "APP Scams"
+            ],
+            "category": "Security & Risk",
+            "pricing_model": "Per Transaction Scanned",
+            "description": "Real-time payment fraud detection using machine learning models trained on consortium data. Specifically tuned to detect APP (Authorized Push Payment) scams, mule accounts, and account takeovers.",
+            "features": [
+                "Real-time scoring (<50ms latency) for in-flight payments",
+                "Behavioral biometrics integration",
+                "Pre-trained models for APP Scams and CEO Fraud",
+                "Explainable AI (XAI) reasoning codes for case analysts",
+                "Feedback loop API for model retraining",
+                "Consortium data sharing for mule detection"
+            ],
+            "technical_requirements": {
+                "input_stream": "Kafka / Kinesis / MQ or REST API hook",
+                "latency_budget": "<100ms round trip integration",
+                "data_retention": "Configurable (default 7 years hot/cold)",
+                "model_governance": "GitOps workflow for rule deployment"
+            },
+            "sla_tier": "Mission Critical"
+        }
+    ]
+}

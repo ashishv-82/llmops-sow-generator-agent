@@ -140,6 +140,32 @@ def search_product_kb(product: Annotated[str, "Product name to search for"]) -> 
     Returns:
         Product information dictionary
     """
+    # FIRST: Check for deterministic mock data (for Demo)
+    products_file = DATA_DIR / "mock_products.json"
+    if products_file.exists():
+        try:
+            with open(products_file, "r") as f:
+                product_data = json.load(f)
+            
+            for p in product_data.get("products", []):
+                # Check for name or alias match
+                if (product.lower() in p["name"].lower()) or \
+                   (product.lower() in [a.lower() for a in p.get("aliases", [])]):
+                    
+                    return {
+                        "name": p["name"],
+                        "category": p["category"],
+                        "pricing_model": p["pricing_model"],
+                        "description": p["description"],
+                        "features": p["features"],
+                        "technical_requirements": p["technical_requirements"],
+                        "sla_tier": p.get("sla_tier", "Standard"),
+                        "source": "Internal Product Catalog (Demo)"
+                    }
+        except Exception as e:
+            # Fallback to RAG if mock file read fails
+            print(f"Error reading mock products: {e}")
+
     retriever = DocumentRetriever()
 
     # Search for product documents

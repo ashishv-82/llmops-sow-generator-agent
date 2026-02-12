@@ -65,3 +65,6 @@ infra/terraform/.terraform.lock.hcl
 # Eval Reports
 reports/
 *.eval.json
+
+# Runtime PIDs
+*.pid

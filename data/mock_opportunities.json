@@ -59,6 +59,126 @@
             "end_date": "2024-12-15",
             "outcome": "Live with Basiq enrichment services.",
             "sow_id": "SOW-2024-003"
+        },
+        {
+            "id": "opp-006",
+            "client_id": "client-004",
+            "name": "Cloud Payment Hub Migration",
+            "product": "Cuspac Real-Time Payments (NPP)",
+            "status": "Negotiation",
+            "value": 2500000,
+            "start_date": null,
+            "end_date": null,
+            "outcome": null,
+            "sow_id": null
+        },
+        {
+            "id": "opp-007",
+            "client_id": "client-004",
+            "name": "Fraud Detection Modernization",
+            "product": "Cuspac AI Fraud Monitor",
+            "status": "Discovery",
+            "value": 900000,
+            "start_date": null,
+            "end_date": null,
+            "outcome": null,
+            "sow_id": null
+        },
+        {
+            "id": "opp-008",
+            "client_id": "client-005",
+            "name": "PayTo Billing Integration",
+            "product": "Cuspac Real-Time Payments (NPP)",
+            "status": "Proposal",
+            "value": 400000,
+            "start_date": null,
+            "end_date": null,
+            "outcome": null,
+            "sow_id": null
+        },
+        {
+            "id": "opp-009",
+            "client_id": "client-005",
+            "name": "Customer Data Enrichment",
+            "product": "Cuspac CDR & Open Banking",
+            "status": "Closed Won",
+            "value": 150000,
+            "start_date": "2024-10-01",
+            "end_date": "2025-01-30",
+            "outcome": "Project setup complete. Data flowing.",
+            "sow_id": "SOW-2024-009"
+        },
+        {
+            "id": "opp-010",
+            "client_id": "client-006",
+            "name": "Real-Time Driver Payouts",
+            "product": "Cuspac Real-Time Payments (NPP)",
+            "status": "In Progress",
+            "value": 300000,
+            "start_date": "2024-11-01",
+            "end_date": "2025-02-28",
+            "outcome": null,
+            "sow_id": "SOW-2024-010"
+        },
+        {
+            "id": "opp-011",
+            "client_id": "client-007",
+            "name": "Neo-Bank Compliance Stack",
+            "product": "Cuspac CDR & Open Banking",
+            "status": "Discovery",
+            "value": 1200000,
+            "start_date": null,
+            "end_date": null,
+            "outcome": null,
+            "sow_id": null
+        },
+        {
+            "id": "opp-012",
+            "client_id": "client-008",
+            "name": "Open Banking Compliance",
+            "product": "Cuspac CDR & Open Banking",
+            "status": "Closed Won",
+            "value": 200000,
+            "start_date": "2024-05-01",
+            "end_date": "2024-08-30",
+            "outcome": "Compliance achieved ahead of deadline.",
+            "sow_id": "SOW-2024-012"
+        },
+        {
+            "id": "opp-013",
+            "client_id": "client-002",
+            "name": "Cross-Border Payments Expansion",
+            "product": "Cuspac Real-Time Payments (NPP)",
+            "status": "Idea",
+            "value": 550000,
+            "start_date": null,
+            "end_date": null,
+            "outcome": null,
+            "sow_id": null
+        },
+        {
+            "id": "opp-014",
+            "client_id": "client-001",
+            "name": "Loyalty Program Data Analysis",
+            "product": "Cuspac CDR & Open Banking",
+            "status": "Proposal",
+            "value": 350000,
+            "start_date": null,
+            "end_date": null,
+            "outcome": null,
+            "sow_id": null
+        },
+        {
+            "id": "opp-015",
+            "client_id": "client-003",
+            "name": "Merchant Settlement Real-Time",
+            "product": "Cuspac Real-Time Payments (NPP)",
+            "status": "Negotiation",
+            "value": 250000,
+            "start_date": null,
+            "end_date": null,
+            "outcome": null,
+            "sow_id": null
         }
     ]
 }

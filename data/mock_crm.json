@@ -73,6 +73,113 @@
             "notes": "BNPL startup needing credit assessment data via Open Banking. Price sensitive but high growth potential.",
             "relationship_since": "2024",
             "total_revenue": 150000
+        },
+        {
+            "id": "client-004",
+            "name": "Oceanic Bank",
+            "industry": "Financial Services (ADI)",
+            "size": "Enterprise",
+            "compliance_tier": "HIGH",
+            "region": "APAC",
+            "contacts": [
+                {
+                    "name": "James Watson",
+                    "title": "CIO",
+                    "email": "j.watson@oceanicbank.com.au",
+                    "phone": "+61 2 9111 2222",
+                    "role": "Decision Maker"
+                },
+                {
+                    "name": "Emily Chen",
+                    "title": "Head of Digital",
+                    "email": "e.chen@oceanicbank.com.au",
+                    "phone": "+61 2 9111 2223",
+                    "role": "Product Owner"
+                }
+            ],
+            "notes": "Focused on modernizing legacy core banking. Interested in cloud-native payment hubs. High regulatory scrutiny.",
+            "relationship_since": "2018",
+            "total_revenue": 6500000
+        },
+        {
+            "id": "client-005",
+            "name": "GreenEnergy Utilities",
+            "industry": "Utilities / Energy",
+            "size": "Large Enterprise",
+            "compliance_tier": "MEDIUM",
+            "region": "APAC",
+            "contacts": [
+                {
+                    "name": "Peter Smith",
+                    "title": "CFO",
+                    "email": "p.smith@greenenergy.com.au",
+                    "phone": "+61 3 9222 3333",
+                    "role": "Budget Holder"
+                }
+            ],
+            "notes": "Expanding into solar financing. Needs recurring billing solution via PayTo. Sustainability focused.",
+            "relationship_since": "2022",
+            "total_revenue": 2800000
+        },
+        {
+            "id": "client-006",
+            "name": "SecureLogistics",
+            "industry": "Transport & Logistics",
+            "size": "Mid-Market",
+            "compliance_tier": "LOW",
+            "region": "APAC",
+            "contacts": [
+                {
+                    "name": "Sarah Jones",
+                    "title": "Operations Director",
+                    "email": "s.jones@securelogistics.com.au",
+                    "phone": "+61 7 3333 4444",
+                    "role": "Decision Maker"
+                }
+            ],
+            "notes": "Need real-time payments for driver disbursements. API integration priority.",
+            "relationship_since": "2024",
+            "total_revenue": 950000
+        },
+        {
+            "id": "client-007",
+            "name": "TechStart Solutions",
+            "industry": "Fintech / SaaS",
+            "size": "Startup",
+            "compliance_tier": "MEDIUM",
+            "region": "APAC",
+            "contacts": [
+                {
+                    "name": "Alex Lee",
+                    "title": "Founder",
+                    "email": "alex@techstart.io",
+                    "phone": "+61 400 111 222",
+                    "role": "Decision Maker"
+                }
+            ],
+            "notes": "Building a neo-bank specific for freelancers. Needs full banking-as-a-service stack via API.",
+            "relationship_since": "2024",
+            "total_revenue": 500000
+        },
+        {
+            "id": "client-008",
+            "name": "Regional Credit Union",
+            "industry": "Financial Services (ADI)",
+            "size": "Mid-Market",
+            "compliance_tier": "HIGH",
+            "region": "APAC",
+            "contacts": [
+                {
+                    "name": "Robert Brown",
+                    "title": "CEO",
+                    "email": "r.brown@regionalcu.com.au",
+                    "phone": "+61 2 6666 7777",
+                    "role": "Decision Maker"
+                }
+            ],
+            "notes": "Conservative but reliable. Needs to comply with Open Banking CDR obligations but lacks internal tech team.",
+            "relationship_since": "2010",
+            "total_revenue": 1800000
         }
     ]
 }
