@@ -135,6 +135,7 @@ class SOWAgent:
 
         if isinstance(final_message, AIMessage):
             from typing import cast
+
             return cast(str, final_message.content)
 
         return str(final_message)
@@ -160,6 +161,7 @@ class SOWAgent:
 
         if isinstance(final_message, AIMessage):
             from typing import cast
+
             return cast(str, final_message.content)
 
         return str(final_message)

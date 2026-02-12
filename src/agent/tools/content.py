@@ -6,14 +6,13 @@ Uses Amazon Bedrock Claude for text generation.
 
 import json
 from pathlib import Path
-from typing import Annotated
+from typing import Annotated, cast
 
 from langchain_aws import ChatBedrock
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_core.tools import tool
 
 from src.agent.config import config
-from typing import cast
 
 # Templates directory
 TEMPLATES_DIR = Path(__file__).parent.parent.parent.parent / "data" / "templates"

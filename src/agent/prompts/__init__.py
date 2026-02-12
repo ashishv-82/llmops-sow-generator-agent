@@ -27,6 +27,7 @@ def load_prompt(name: str) -> dict[str, Any]:
         raise FileNotFoundError(f"Prompt file not found: {prompt_file}")
 
     from typing import cast
+
     with open(prompt_file) as f:
         data = yaml.safe_load(f)
 

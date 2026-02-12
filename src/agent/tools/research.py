@@ -188,7 +188,9 @@ def search_product_kb(product: Annotated[str, "Product name to search for"]) -> 
     return {
         "product": product,
         "content": content,
-        "sources": [cast(dict[str, Any], r["metadata"]).get("file_name", "unknown") for r in results],
+        "sources": [
+            cast(dict[str, Any], r["metadata"]).get("file_name", "unknown") for r in results
+        ],
     }
 
 
