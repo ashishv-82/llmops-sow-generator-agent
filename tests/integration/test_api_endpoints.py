@@ -15,8 +15,8 @@ def mock_sow_agent_instance():
 
 
 @pytest.fixture(scope="module")
-def client():
-    """Create FastAPI test client."""
+def client(mock_sow_agent_instance):
+    """Create FastAPI test client after mocks are in place."""
     return TestClient(app)
 
 
