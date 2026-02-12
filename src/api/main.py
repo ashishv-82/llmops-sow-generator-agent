@@ -4,13 +4,14 @@ FastAPI main application.
 Provides REST API for SOW Generator.
 """
 
+import logging
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-import logging
 
 # Import routers
-from src.api.routes import sow_router, research_router
+from src.api.routes import research_router, sow_router
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)

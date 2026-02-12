@@ -22,24 +22,29 @@ print("TEST 1: Module Imports")
 print("-" * 60)
 try:
     from src.agent.config import config
+
     print("✅ config imported")
-    
+
     from src.agent.tools import ALL_TOOLS
+
     print(f"✅ ALL_TOOLS imported ({len(ALL_TOOLS)} tools)")
-    
-    from src.agent.core import get_agent, SOWAgent
+
+    from src.agent.core import SOWAgent, get_agent
+
     print("✅ agent core imported")
-    
+
     # RAG imports (just check modules exist)
     import src.rag.embeddings
     import src.rag.indexer
     import src.rag.retriever
+
     print("✅ RAG modules found")
-    
+
     print("\n✅ All imports successful!\n")
 except Exception as e:
     print(f"\n❌ Import failed: {e}\n")
     import traceback
+
     traceback.print_exc()
     sys.exit(1)
 
@@ -62,7 +67,7 @@ print("TEST 3: Tool Registration")
 print("-" * 60)
 print("Registered Tools:")
 for i, tool in enumerate(ALL_TOOLS, 1):
-    tool_name = getattr(tool, 'name', str(tool))
+    tool_name = getattr(tool, "name", str(tool))
     print(f"  {i:2d}. {tool_name}")
 print(f"\n✅ {len(ALL_TOOLS)} tools registered!\n")
 
@@ -73,29 +78,35 @@ print("-" * 60)
 try:
     # Test CRM search
     from src.agent.tools.research import search_crm
+
     result = search_crm("Acme")
     print(f"✅ search_crm: Found client '{result.get('name', 'Unknown')}'")
-    
+
     # Test opportunities search
     from src.agent.tools.research import search_opportunities
+
     opps = search_opportunities("CLIENT-001")
     print(f"✅ search_opportunities: Found {len(opps)} opportunities")
-    
+
     # Test compliance rules
     from src.agent.tools.research import search_compliance_kb
+
     compliance = search_compliance_kb("Real-Time Payments", "HIGH")
-    print(f"✅ search_compliance_kb: Found {len(compliance.get('mandatory_clauses', []))} mandatory clauses")
-    
+    print(
+        f"✅ search_compliance_kb: Found {len(compliance.get('mandatory_clauses', []))} mandatory clauses"
+    )
+
     # Test context assembly
     from src.agent.tools.context import assemble_context
+
     context_pkg = assemble_context(
         crm_data=result,
         product_info={"name": "Test Product"},
         historical_sows=[],
-        compliance_rules=compliance
+        compliance_rules=compliance,
     )
-    print(f"✅ assemble_context: Created context package")
-    
+    print("✅ assemble_context: Created context package")
+
     print("\n✅ All non-AWS tools working!\n")
 except Exception as e:
     print(f"\n⚠️  Tool test warning: {e}\n")
@@ -106,6 +117,7 @@ print("-" * 60)
 aws_configured = False
 try:
     import boto3
+
     # Try to create bedrock runtime client
     session = boto3.Session(profile_name=config.aws_profile)
     client = session.client("bedrock-runtime", region_name=config.aws_region)
@@ -128,14 +140,15 @@ print("TEST 6: ChromaDB Vector Store")
 print("-" * 60)
 try:
     import chromadb
+
     chroma_client = chromadb.PersistentClient(path=config.chroma_persist_dir)
     collections = chroma_client.list_collections()
-    print(f"✅ ChromaDB initialized")
+    print("✅ ChromaDB initialized")
     print(f"   Path: {config.chroma_persist_dir}")
     print(f"   Collections: {len(collections)}")
     for coll in collections:
         print(f"     - {coll.name}: {coll.count()} documents")
-    
+
     if len(collections) == 0:
         print("\n  ℹ️  No collections found. Run indexing script:")
         print("     python scripts/index_documents.py")
@@ -153,7 +166,7 @@ if aws_configured:
         print(f"   Type: {type(agent).__name__}")
         print(f"   Tools: {len(ALL_TOOLS)}")
         print()
-        
+
         # Show a sample request we could run
         print("ℹ️  Sample test request:")
         print('   agent.run("Search for client Acme Financial")')

@@ -1,6 +1,7 @@
-import streamlit as st
 import sys
 from pathlib import Path
+
+import streamlit as st
 
 # Add project root to sys.path
 root_path = Path(__file__).parent.parent.parent.parent
@@ -11,17 +12,18 @@ from src.ui.components.styles import apply_custom_css
 
 # Page Config
 st.set_page_config(
-    page_title="Cuscal | Select Agent", 
-    page_icon="🟥", 
+    page_title="Cuscal | Select Agent",
+    page_icon="🟥",
     layout="wide",
-    initial_sidebar_state="collapsed"
+    initial_sidebar_state="collapsed",
 )
 
 # Apply centralized styles
 apply_custom_css()
 
 # Custom Homepage Content
-st.markdown("""
+st.markdown(
+    """
 <div class="cuscal-header">
     <div class="logo-container">
         Cuscal <span class="logo-square"></span>
@@ -35,7 +37,9 @@ st.markdown("""
         Enterprise-grade AI for secure workflows. Deploy specialized agents for SOW generation, auditing, and intelligence.
     </div>
 </div>
-""", unsafe_allow_html=True)
+""",
+    unsafe_allow_html=True,
+)
 
 # 4-Column Grid
 col1, col2, col3, col4 = st.columns(4)
@@ -48,7 +52,8 @@ ICON_BOOK = """<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fi
 ARROW_RIGHT = """<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>"""
 
 with col1:
-    st.markdown(f"""
+    st.markdown(
+        f"""
     <a href="generate_sow" class="agent-card">
         <div class="card-icon icon-sow">{ICON_EDIT}</div>
         <div class="card-title">Create SOW</div>
@@ -60,10 +65,13 @@ with col1:
             <span class="card-arrow">→</span>
         </div>
     </a>
-    """, unsafe_allow_html=True)
+    """,
+        unsafe_allow_html=True,
+    )
 
 with col2:
-    st.markdown(f"""
+    st.markdown(
+        f"""
     <a href="review_sow" class="agent-card">
         <div class="card-icon icon-audit">{ICON_SHIELD}</div>
         <div class="card-title">Review SOW</div>
@@ -75,10 +83,13 @@ with col2:
             <span class="card-arrow">→</span>
         </div>
     </a>
-    """, unsafe_allow_html=True)
+    """,
+        unsafe_allow_html=True,
+    )
 
 with col3:
-    st.markdown(f"""
+    st.markdown(
+        f"""
     <a href="client_research" class="agent-card">
         <div class="card-icon icon-intel">{ICON_BRAIN}</div>
         <div class="card-title">Client Research</div>
@@ -90,10 +101,13 @@ with col3:
             <span class="card-arrow">→</span>
         </div>
     </a>
-    """, unsafe_allow_html=True)
+    """,
+        unsafe_allow_html=True,
+    )
 
 with col4:
-    st.markdown(f"""
+    st.markdown(
+        f"""
     <a href="product_research" class="agent-card">
         <div class="card-icon icon-kb">{ICON_BOOK}</div>
         <div class="card-title">Product Research</div>
@@ -105,4 +119,6 @@ with col4:
             <span class="card-arrow">→</span>
         </div>
     </a>
-    """, unsafe_allow_html=True)
+    """,
+        unsafe_allow_html=True,
+    )

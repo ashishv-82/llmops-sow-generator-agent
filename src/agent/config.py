@@ -35,9 +35,7 @@ class Config:
         # AWS Configuration
         self.aws_region = os.getenv("AWS_REGION", "ap-southeast-2")
         self.aws_profile = os.getenv("AWS_PROFILE", "default")
-        self.bedrock_model_id = os.getenv(
-            "BEDROCK_MODEL_ID", "apac.amazon.nova-pro-v1:0"
-        )
+        self.bedrock_model_id = os.getenv("BEDROCK_MODEL_ID", "apac.amazon.nova-pro-v1:0")
         print(f"🚀 Using Bedrock Model ID: {self.bedrock_model_id}")
 
         # Model parameters
@@ -55,8 +53,8 @@ class Config:
         self.log_level = os.getenv("LOG_LEVEL", "INFO")
 
         # Initialize clients
-        self._bedrock_runtime: Optional[boto3.client] = None
-        self._chroma_client: Optional[chromadb.Client] = None
+        self._bedrock_runtime: boto3.client | None = None
+        self._chroma_client: chromadb.Client | None = None
 
         self._initialized = True
 

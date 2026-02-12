@@ -3,13 +3,12 @@ Document handler utilities for PDF/DOCX parsing and export.
 """
 
 from pathlib import Path
-from typing import Union
 
 from docx import Document
 from pypdf import PdfReader
 
 
-def parse_document(file_path: Union[str, Path]) -> str:
+def parse_document(file_path: str | Path) -> str:
     """
     Extract text from a PDF or DOCX file.
 
@@ -60,7 +59,7 @@ def _parse_docx(file_path: Path) -> str:
     return "\n\n".join(text_parts)
 
 
-def export_to_docx(content: str, output_path: Union[str, Path]) -> None:
+def export_to_docx(content: str, output_path: str | Path) -> None:
     """
     Export markdown/text content to a DOCX file.
 

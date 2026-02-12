@@ -2,10 +2,6 @@
 Embeddings module for RAG pipeline using Amazon Bedrock Titan.
 """
 
-from typing import List
-
-import boto3
-
 from src.agent.config import config
 
 
@@ -22,7 +18,7 @@ class BedrockEmbeddings:
         self.model_id = model_id
         self.client = config.bedrock_runtime
 
-    def embed_documents(self, texts: List[str]) -> List[List[float]]:
+    def embed_documents(self, texts: list[str]) -> list[list[float]]:
         """
         Embed a list of documents.
 
@@ -38,7 +34,7 @@ class BedrockEmbeddings:
             embeddings.append(embedding)
         return embeddings
 
-    def embed_query(self, text: str) -> List[float]:
+    def embed_query(self, text: str) -> list[float]:
         """
         Embed a single query string.
 
@@ -50,7 +46,7 @@ class BedrockEmbeddings:
         """
         return self._embed_single(text)
 
-    def _embed_single(self, text: str) -> List[float]:
+    def _embed_single(self, text: str) -> list[float]:
         """
         Embed a single text string.
 

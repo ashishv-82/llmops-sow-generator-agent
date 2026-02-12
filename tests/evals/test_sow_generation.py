@@ -5,18 +5,19 @@ Tests SOW generation across multiple scenarios and calculates
 aggregate quality metrics.
 """
 
-import pytest
 import json
 from pathlib import Path
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock, patch
+
+import pytest
 
 from src.agent.core.planner import SOWAgent
 from tests.evals.metrics import (
-    section_completeness,
-    keyword_coverage,
+    calculate_aggregate_metrics,
     format_compliance,
+    keyword_coverage,
     length_check,
-    calculate_aggregate_metrics
+    section_completeness,
 )
 
 
@@ -32,7 +33,7 @@ def eval_cases():
 def test_sow_generation_quality(eval_cases):
     """
     Test SOW generation quality across multiple scenarios.
-    
+
     This test:
     1. Generates SOWs for each test case
     2. Evaluates quality metrics
@@ -42,35 +43,38 @@ def test_sow_generation_quality(eval_cases):
     # Mock the LLM to return realistic SOW content
     # In production, this would call the real LLM
     mock_llm_responses = _generate_mock_sows()
-    
+
     with patch("src.agent.core.planner.ChatBedrock") as mock_chat:
         mock_instance = MagicMock()
         mock_chat.return_value = mock_instance
-        
+
         results = []
-        
+
         for i, case in enumerate(eval_cases):
             # Set up mock response for this case
             mock_sow = mock_llm_responses.get(case["test_id"], _default_mock_sow())
             mock_instance.bind_tools.return_value.invoke.return_value.content = mock_sow
-            
+
             # Generate SOW (in eval mode, we'd use real agent)
             # For now, use the mocked response directly
             generated_sow = mock_sow
-            
+
             # Evaluate metrics
             completeness = section_completeness(generated_sow, case["expected_sections"])
             coverage = keyword_coverage(generated_sow, case["expected_keywords"])
             format_ok = format_compliance(generated_sow)
             length_ok = length_check(generated_sow, case["min_words"], case["max_words"])
-            
+
             # Calculate overall score
-            quality_score = (completeness * 0.4 + coverage * 0.3 + 
-                           (1.0 if format_ok else 0.0) * 0.2 + 
-                           (1.0 if length_ok else 0.0) * 0.1)
-            
+            quality_score = (
+                completeness * 0.4
+                + coverage * 0.3
+                + (1.0 if format_ok else 0.0) * 0.2
+                + (1.0 if length_ok else 0.0) * 0.1
+            )
+
             test_passed = quality_score >= 0.7  # 70% threshold
-            
+
             result = {
                 "test_id": case["test_id"],
                 "description": case["description"],
@@ -79,31 +83,35 @@ def test_sow_generation_quality(eval_cases):
                 "format_valid": format_ok,
                 "length_valid": length_ok,
                 "quality_score": quality_score,
-                "pass": test_passed
+                "pass": test_passed,
             }
             results.append(result)
-            
+
             # Print individual test results
             status = "✓ PASS" if test_passed else "✗ FAIL"
             print(f"\n{status} {case['test_id']}: {case['description']}")
-            print(f"  Quality: {quality_score:.1%} (completeness: {completeness:.1%}, " +
-                  f"coverage: {coverage:.1%}, format: {format_ok}, length: {length_ok})")
-        
+            print(
+                f"  Quality: {quality_score:.1%} (completeness: {completeness:.1%}, "
+                + f"coverage: {coverage:.1%}, format: {format_ok}, length: {length_ok})"
+            )
+
         # Calculate aggregate metrics
         aggregate = calculate_aggregate_metrics(results)
         pass_rate = aggregate.get("pass", {}).get("mean", 0.0)
         avg_quality = aggregate.get("quality_score", {}).get("mean", 0.0)
-        
+
         # Print summary
         print(f"\n{'='*60}")
-        print(f"SOW Generation Evaluation Summary")
+        print("SOW Generation Evaluation Summary")
         print(f"{'='*60}")
         print(f"Total tests: {len(results)}")
         print(f"Pass rate: {pass_rate:.1%}")
         print(f"Average quality score: {avg_quality:.1%}")
         print(f"Average completeness: {aggregate.get('completeness', {}).get('mean', 0):.1%}")
-        print(f"Average keyword coverage: {aggregate.get('keyword_coverage', {}).get('mean', 0):.1%}")
-        
+        print(
+            f"Average keyword coverage: {aggregate.get('keyword_coverage', {}).get('mean', 0):.1%}"
+        )
+
         # Assert minimum quality threshold
         assert pass_rate >= 0.6, (
             f"SOW generation pass rate {pass_rate:.1%} is below 60% threshold. "
@@ -160,7 +168,7 @@ Implement basic fraud detection with limited customization.
 
 ## Timeline
 4 weeks total implementation.
-"""
+""",
     }
 
 

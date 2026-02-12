@@ -7,7 +7,7 @@ Validates SOWs against mandatory clauses, prohibited terms, and SLA requirements
 import json
 import re
 from pathlib import Path
-from typing import Annotated, Any, Dict, List
+from typing import Annotated, Any
 
 from langchain_core.tools import tool
 
@@ -18,8 +18,8 @@ DATA_DIR = Path(__file__).parent.parent.parent.parent / "data"
 @tool
 def check_mandatory_clauses_v2(
     sow_text: Annotated[str, "SOW text to check"],
-    requirements: Annotated[List[Any], "List of mandatory clauses (strings or dicts)"],
-) -> Dict:
+    requirements: Annotated[list[Any], "List of mandatory clauses (strings or dicts)"],
+) -> dict:
     """
     Check if all mandatory clauses are present in the SOW.
 
@@ -39,7 +39,7 @@ def check_mandatory_clauses_v2(
             clause = item.get("name") or item.get("text") or str(item)
         else:
             clause = str(item)
-            
+
         # Case-insensitive search
         if re.search(re.escape(clause), sow_text, re.IGNORECASE):
             found_clauses.append(clause)
@@ -58,7 +58,7 @@ def check_mandatory_clauses_v2(
 
 
 @tool
-def check_prohibited_terms(sow_text: Annotated[str, "SOW text to check"]) -> Dict:
+def check_prohibited_terms(sow_text: Annotated[str, "SOW text to check"]) -> dict:
     """
     Check for prohibited terms or risky language in the SOW.
 
@@ -76,7 +76,7 @@ def check_prohibited_terms(sow_text: Annotated[str, "SOW text to check"]) -> Dic
     if not compliance_file.exists():
         return {"error": "Compliance rules file not found"}
 
-    with open(compliance_file, "r") as f:
+    with open(compliance_file) as f:
         data = json.load(f)
 
     prohibited_terms = data.get("prohibited_terms", [])
@@ -112,7 +112,7 @@ def check_sla_requirements(
     sow_text: Annotated[str, "SOW text to check"],
     product: Annotated[str, "Product name"],
     client_tier: Annotated[str, "Client compliance tier (HIGH, MEDIUM, LOW)"],
-) -> Dict:
+) -> dict:
     """
     Validate SLA requirements based on product and client tier.
 
@@ -132,7 +132,7 @@ def check_sla_requirements(
     if not compliance_file.exists():
         return {"error": "Compliance rules file not found"}
 
-    with open(compliance_file, "r") as f:
+    with open(compliance_file) as f:
         data = json.load(f)
 
     tier_requirements = data.get("sla_requirements_by_tier", {}).get(client_tier, {})
@@ -162,7 +162,7 @@ def check_sla_requirements(
             findings.append(
                 {
                     "severity": "MEDIUM",
-                    "issue": f"Missing response time SLA",
+                    "issue": "Missing response time SLA",
                     "location": "SLA Section",
                     "suggestion": f"Add response time commitment: '{response_time}'",
                 }
@@ -179,7 +179,7 @@ def check_sla_requirements(
 
 
 @tool
-def generate_compliance_report(findings: Annotated[List[Dict], "List of findings"]) -> str:
+def generate_compliance_report(findings: Annotated[list[dict], "List of findings"]) -> str:
     """
     Generate a formatted compliance report from findings.
 

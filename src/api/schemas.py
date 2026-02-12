@@ -2,28 +2,26 @@
 Pydantic schemas for API request and response models.
 """
 
-from datetime import datetime
-from typing import List, Optional, Dict, Any
-from pydantic import BaseModel, Field
+from typing import Any
 
+from pydantic import BaseModel, Field
 
 # ============================================================================
 # SOW Creation Schemas
 # ============================================================================
 
+
 class SOWCreateRequest(BaseModel):
     """Request model for SOW creation."""
-    
+
     client_id: str = Field(..., description="Client ID from CRM")
     product: str = Field(..., description="Product name")
-    requirements: Optional[str] = Field(
-        None, description="Additional requirements or customizations"
-    )
+    requirements: str | None = Field(None, description="Additional requirements or customizations")
     quality_mode: str = Field(
         "production",
         description="Generation mode: 'quick' (15s, $0.06) or 'production' (35s, $0.23)",
     )
-    
+
     class Config:
         json_schema_extra = {
             "example": {
@@ -37,14 +35,14 @@ class SOWCreateRequest(BaseModel):
 
 class SOWCreateResponse(BaseModel):
     """Response model for SOW creation."""
-    
+
     sow_text: str = Field(..., description="Generated SOW content")
-    metadata: Dict[str, Any] = Field(..., description="Generation metadata")
+    metadata: dict[str, Any] = Field(..., description="Generation metadata")
     generation_time_seconds: float = Field(..., description="Time taken to generate")
     cost_usd: float = Field(..., description="Estimated cost in USD")
     llm_calls: int = Field(..., description="Number of LLM calls made")
     quality_mode: str = Field(..., description="Mode used for generation")
-    
+
     class Config:
         json_schema_extra = {
             "example": {
@@ -66,17 +64,16 @@ class SOWCreateResponse(BaseModel):
 # SOW Review Schemas
 # ============================================================================
 
+
 class SOWReviewRequest(BaseModel):
     """Request model for SOW compliance review."""
-    
+
     sow_text: str = Field(..., description="SOW content to review")
-    product: Optional[str] = Field(
-        None, description="Product name for SLA validation"
-    )
-    client_tier: Optional[str] = Field(
+    product: str | None = Field(None, description="Product name for SLA validation")
+    client_tier: str | None = Field(
         None, description="Client tier (HIGH/MEDIUM/LOW) for compliance rules"
     )
-    
+
     class Config:
         json_schema_extra = {
             "example": {
@@ -89,22 +86,22 @@ class SOWReviewRequest(BaseModel):
 
 class ComplianceIssue(BaseModel):
     """Individual compliance issue."""
-    
+
     severity: str = Field(..., description="Severity: HIGH, MEDIUM, LOW")
     category: str = Field(..., description="Issue category")
     description: str = Field(..., description="Issue description")
-    location: Optional[str] = Field(None, description="Location in document")
-    suggestion: Optional[str] = Field(None, description="Suggested fix")
+    location: str | None = Field(None, description="Location in document")
+    suggestion: str | None = Field(None, description="Suggested fix")
 
 
 class SOWReviewResponse(BaseModel):
     """Response model for SOW review."""
-    
+
     compliance_score: int = Field(..., description="Overall score (0-100)")
     status: str = Field(..., description="PASS, WARNING, or FAIL")
-    issues: List[ComplianceIssue] = Field(..., description="List of issues found")
-    summary: Dict[str, int] = Field(..., description="Issue count by severity")
-    
+    issues: list[ComplianceIssue] = Field(..., description="List of issues found")
+    summary: dict[str, int] = Field(..., description="Issue count by severity")
+
     class Config:
         json_schema_extra = {
             "example": {
@@ -128,29 +125,24 @@ class SOWReviewResponse(BaseModel):
 # Research Schemas
 # ============================================================================
 
+
 class ClientResearchRequest(BaseModel):
     """Request model for client research."""
-    
-    client_name: Optional[str] = Field(None, description="Client name (partial match)")
-    client_id: Optional[str] = Field(None, description="Exact client ID")
-    
+
+    client_name: str | None = Field(None, description="Client name (partial match)")
+    client_id: str | None = Field(None, description="Exact client ID")
+
     class Config:
-        json_schema_extra = {
-            "example": {"client_name": "Acme"}
-        }
+        json_schema_extra = {"example": {"client_name": "Acme"}}
 
 
 class ClientResearchResponse(BaseModel):
     """Response model for client research."""
-    
-    client_data: Dict[str, Any] = Field(..., description="Client information from CRM")
-    opportunities: List[Dict[str, Any]] = Field(
-        ..., description="Past opportunities"
-    )
-    historical_sows: List[Dict[str, Any]] = Field(
-        ..., description="Historical SOWs"
-    )
-    
+
+    client_data: dict[str, Any] = Field(..., description="Client information from CRM")
+    opportunities: list[dict[str, Any]] = Field(..., description="Past opportunities")
+    historical_sows: list[dict[str, Any]] = Field(..., description="Historical SOWs")
+
     class Config:
         json_schema_extra = {
             "example": {
@@ -160,9 +152,7 @@ class ClientResearchResponse(BaseModel):
                     "industry": "Banking",
                     "size": "Enterprise",
                 },
-                "opportunities": [
-                    {"id": "OPP-001", "name": "Data Migration", "value": 1200000}
-                ],
+                "opportunities": [{"id": "OPP-001", "name": "Data Migration", "value": 1200000}],
                 "historical_sows": [
                     {"id": "SOW-001", "product": "Real-Time Payments", "year": 2023}
                 ],
@@ -172,24 +162,20 @@ class ClientResearchResponse(BaseModel):
 
 class ProductResearchRequest(BaseModel):
     """Request model for product research."""
-    
+
     product_name: str = Field(..., description="Product name")
-    
+
     class Config:
-        json_schema_extra = {
-            "example": {"product_name": "Real-Time Payments"}
-        }
+        json_schema_extra = {"example": {"product_name": "Real-Time Payments"}}
 
 
 class ProductResearchResponse(BaseModel):
     """Response model for product research."""
-    
-    product_info: Dict[str, Any] = Field(..., description="Product details")
-    features: List[str] = Field(..., description="Key features")
-    requirements: Dict[str, Any] = Field(
-        ..., description="Technical requirements"
-    )
-    
+
+    product_info: dict[str, Any] = Field(..., description="Product details")
+    features: list[str] = Field(..., description="Key features")
+    requirements: dict[str, Any] = Field(..., description="Technical requirements")
+
     class Config:
         json_schema_extra = {
             "example": {
@@ -215,9 +201,10 @@ class ProductResearchResponse(BaseModel):
 # Error Response
 # ============================================================================
 
+
 class ErrorResponse(BaseModel):
     """Standard error response."""
-    
+
     error: str = Field(..., description="Error message")
     status_code: int = Field(..., description="HTTP status code")
-    details: Optional[str] = Field(None, description="Additional details")
+    details: str | None = Field(None, description="Additional details")

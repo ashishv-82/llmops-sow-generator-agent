@@ -18,7 +18,7 @@ print("\n[1/6] Testing config import...")
 try:
     from src.agent.config import config
 
-    print(f"   ✅ Config loaded")
+    print("   ✅ Config loaded")
     print(f"   - AWS Region: {config.aws_region}")
     print(f"   - Model: {config.bedrock_model_id}")
     print(f"   - ChromaDB Dir: {config.chroma_persist_dir}")
@@ -50,7 +50,7 @@ except Exception as e:
 # Test 4: Import document utilities
 print("\n[4/6] Testing document utilities...")
 try:
-    from src.agent.utils import parse_document, export_to_docx
+    from src.agent.utils import export_to_docx, parse_document
 
     print("   ✅ Document utilities imported")
 except Exception as e:
@@ -59,11 +59,11 @@ except Exception as e:
 # Test 5: Test prompt loading
 print("\n[5/6] Testing prompt loading...")
 try:
-    from src.agent.prompts import load_prompt, get_system_prompt
+    from src.agent.prompts import get_system_prompt, load_prompt
 
     planner_prompt = load_prompt("planner")
     system_prompt = get_system_prompt("planner")
-    print(f"   ✅ Prompts loaded")
+    print("   ✅ Prompts loaded")
     print(f"   - Planner version: {planner_prompt.get('version')}")
     print(f"   - System prompt length: {len(system_prompt)} chars")
 except Exception as e:

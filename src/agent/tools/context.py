@@ -4,7 +4,7 @@ Context assembly tools for the SOW Generator agent.
 Provides tools to assemble research data into structured context for generation.
 """
 
-from typing import Annotated, Dict, List
+from typing import Annotated
 
 from langchain_core.tools import tool
 from pydantic import BaseModel
@@ -13,29 +13,29 @@ from pydantic import BaseModel
 class ContextPackage(BaseModel):
     """Structured context package for SOW generation."""
 
-    client: Dict
-    product: Dict
-    historical_sows: List[Dict]
-    compliance: Dict
-    opportunities: List[Dict]
+    client: dict
+    product: dict
+    historical_sows: list[dict]
+    compliance: dict
+    opportunities: list[dict]
 
 
 class ClientBrief(BaseModel):
     """Client research summary."""
 
-    client: Dict
-    opportunities: List[Dict]
-    past_engagements: List[Dict]
+    client: dict
+    opportunities: list[dict]
+    past_engagements: list[dict]
 
 
 @tool
 def assemble_context(
-    crm_data: Annotated[Dict, "Client data from CRM"],
-    product_info: Annotated[Dict, "Product information"],
-    history: Annotated[List[Dict], "Historical SOW data"],
-    compliance: Annotated[Dict, "Compliance requirements"],
-    opportunities: Annotated[List[Dict] | None, "Optional opportunities data"] = None,
-) -> Dict:
+    crm_data: Annotated[dict, "Client data from CRM"],
+    product_info: Annotated[dict, "Product information"],
+    history: Annotated[list[dict], "Historical SOW data"],
+    compliance: Annotated[dict, "Compliance requirements"],
+    opportunities: Annotated[list[dict] | None, "Optional opportunities data"] = None,
+) -> dict:
     """
     Assemble all research data into a structured context package for SOW generation.
 
@@ -64,9 +64,9 @@ def assemble_context(
 
 @tool
 def assemble_client_brief(
-    crm_data: Annotated[Dict, "Client data from CRM"],
-    opportunities: Annotated[List[Dict], "Opportunities data"],
-) -> Dict:
+    crm_data: Annotated[dict, "Client data from CRM"],
+    opportunities: Annotated[list[dict], "Opportunities data"],
+) -> dict:
     """
     Create a client briefing document for sales/delivery teams.
 

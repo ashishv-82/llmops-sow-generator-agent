@@ -8,7 +8,7 @@ import yaml
 PROMPTS_DIR = Path(__file__).parent
 
 
-def load_prompt(name: str) -> Dict[str, Any]:
+def load_prompt(name: str) -> dict[str, Any]:
     """
     Load a prompt template from YAML file.
 
@@ -26,7 +26,7 @@ def load_prompt(name: str) -> Dict[str, Any]:
     if not prompt_file.exists():
         raise FileNotFoundError(f"Prompt file not found: {prompt_file}")
 
-    with open(prompt_file, "r") as f:
+    with open(prompt_file) as f:
         data = yaml.safe_load(f)
 
     return data

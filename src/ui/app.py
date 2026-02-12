@@ -2,17 +2,18 @@
 Streamlit main application for SOW Generator.
 """
 
-import streamlit as st
 import sys
 from pathlib import Path
+
+import streamlit as st
 
 # Add project root to sys.path
 root_path = Path(__file__).parent.parent.parent
 if str(root_path) not in sys.path:
     sys.path.append(str(root_path))
 
-from src.ui.components.styles import apply_custom_css
 from src.agent.config import config
+from src.ui.components.styles import apply_custom_css
 
 # Page config
 st.set_page_config(
@@ -53,7 +54,7 @@ with st.sidebar:
 <div class="engine-info">Powered by {model_name}</div>
 </div>
 </div>""",
-        unsafe_allow_html=True
+        unsafe_allow_html=True,
     )
 
 # Run the app

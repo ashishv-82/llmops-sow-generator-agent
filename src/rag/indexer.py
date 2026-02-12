@@ -6,7 +6,6 @@ Handles chunking and indexing documents to ChromaDB.
 
 import re
 from pathlib import Path
-from typing import Dict, List, Tuple
 
 from src.agent.config import config
 from src.rag.embeddings import BedrockEmbeddings
@@ -32,9 +31,7 @@ class DocumentIndexer:
             metadata={"description": "SOW documents and knowledge base"},
         )
 
-    def index_markdown_file(
-        self, file_path: Path, metadata: Dict[str, str] | None = None
-    ) -> None:
+    def index_markdown_file(self, file_path: Path, metadata: dict[str, str] | None = None) -> None:
         """
         Index a markdown file with section-aware chunking.
 
@@ -73,7 +70,7 @@ class DocumentIndexer:
             ids=ids, documents=documents, metadatas=metadatas, embeddings=embeddings
         )
 
-    def _chunk_markdown(self, content: str, max_chunk_size: int = 1000) -> List[Tuple[str, str]]:
+    def _chunk_markdown(self, content: str, max_chunk_size: int = 1000) -> list[tuple[str, str]]:
         """
         Chunk markdown content by sections.
 
@@ -111,9 +108,7 @@ class DocumentIndexer:
 
         return chunks
 
-    def _split_large_chunk(
-        self, section: str, text: str, max_size: int
-    ) -> List[Tuple[str, str]]:
+    def _split_large_chunk(self, section: str, text: str, max_size: int) -> list[tuple[str, str]]:
         """
         Split a large chunk into smaller pieces if needed.
 

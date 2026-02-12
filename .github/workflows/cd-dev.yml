@@ -1,0 +1,39 @@
+name: Deploy to Dev
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:  # Manual trigger
+
+jobs:
+  build-and-deploy:
+    name: Build & Deploy to Dev
+    runs-on: ubuntu-latest
+    environment: development
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Build Docker image
+        run: |
+          docker build -t sow-generator-agent:dev .
+      
+      - name: Save Docker image
+        run: |
+          docker save sow-generator-agent:dev > sow-generator-dev.tar
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-image-dev
+          path: sow-generator-dev.tar
+          retention-days: 7
+      
+      - name: Deployment notification
+        run: |
+          echo "✅ Dev deployment complete"
+          echo "Image: sow-generator-agent:dev"
+          echo "Note: AWS deployment will be configured in Phase 6"

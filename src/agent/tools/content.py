@@ -6,7 +6,7 @@ Uses Amazon Bedrock Claude for text generation.
 
 import json
 from pathlib import Path
-from typing import Annotated, Dict, List
+from typing import Annotated
 
 from langchain_aws import ChatBedrock
 from langchain_core.messages import HumanMessage, SystemMessage
@@ -32,7 +32,7 @@ def _get_llm() -> ChatBedrock:
 
 @tool
 def generate_sow_draft(
-    context: Annotated[Dict, "Context package with client, product, history, compliance"],
+    context: Annotated[dict, "Context package with client, product, history, compliance"],
     template_name: Annotated[str, "Template to use"] = "standard",
 ) -> str:
     """
@@ -96,24 +96,24 @@ Generate a complete, professional SOW following the template structure."""
 
 @tool
 def generate_sow_draft_with_reflection(
-    context: Annotated[Dict, "Context package with client, product, history, compliance"],
+    context: Annotated[dict, "Context package with client, product, history, compliance"],
     template_name: Annotated[str, "Template to use"] = "standard",
 ) -> str:
     """
     Generate a production-grade SOW draft with internal reflection and refinement.
-    
+
     Multi-step process:
     1. Generate initial draft
     2. Self-critique for quality, compliance, and completeness
     3. Revise based on critique
     4. Return polished final SOW
-    
+
     This hybrid approach combines tool simplicity with agent-like reasoning.
-    
+
     Args:
         context: Context package from assemble_context tool
         template_name: Name of the template to use (default: "standard")
-    
+
     Returns:
         Production-grade SOW draft in markdown format
     """
@@ -121,10 +121,10 @@ def generate_sow_draft_with_reflection(
     template_file = TEMPLATES_DIR / f"{template_name}_sow_template.md"
     if not template_file.exists():
         return f"Error: Template '{template_name}' not found"
-    
+
     template = template_file.read_text()
     llm = _get_llm()
-    
+
     # STEP 1: Generate initial draft
     generation_system = """You are an expert SOW (Statement of Work) writer.
 Generate a comprehensive, professional SOW based on the provided context.
@@ -136,7 +136,7 @@ Key requirements:
 - Reference similar past SOWs for structure and pricing
 - Ensure all sections are complete and specific (no placeholders)
 - Be clear about scope boundaries (what's included vs excluded)"""
-    
+
     generation_prompt = f"""Generate a complete SOW using this context:
 
 CLIENT INFORMATION:
@@ -155,13 +155,13 @@ TEMPLATE STRUCTURE:
 {template}
 
 Generate a complete, professional SOW following the template structure."""
-    
+
     initial_messages = [
         SystemMessage(content=generation_system),
-        HumanMessage(content=generation_prompt)
+        HumanMessage(content=generation_prompt),
     ]
     initial_draft = llm.invoke(initial_messages).content
-    
+
     # STEP 2: Self-critique
     critique_system = """You are an expert SOW reviewer and compliance auditor.
 Analyze the provided SOW draft and identify areas for improvement.
@@ -173,7 +173,7 @@ Focus on:
 - Inconsistencies or contradictions
 - Professional tone and clarity
 - Technical accuracy based on product info"""
-    
+
     critique_prompt = f"""Review this SOW draft:
 
 {initial_draft}
@@ -187,13 +187,13 @@ Provide a detailed critique covering:
 3. Specific recommendations for revision
 
 Be constructive but thorough."""
-    
+
     critique_messages = [
         SystemMessage(content=critique_system),
-        HumanMessage(content=critique_prompt)
+        HumanMessage(content=critique_prompt),
     ]
     critique = llm.invoke(critique_messages).content
-    
+
     # STEP 3: Revise based on critique
     revision_system = """You are an expert SOW writer performing final revision.
 Improve the SOW draft based on the detailed critique provided.
@@ -203,7 +203,7 @@ Maintain what works well, fix what doesn't, and ensure:
 - All sections are complete and professional
 - Language is clear, specific, and unambiguous
 - The final SOW is production-ready"""
-    
+
     revision_prompt = f"""Revise this SOW draft based on the critique:
 
 ORIGINAL DRAFT:
@@ -214,20 +214,20 @@ CRITIQUE:
 
 Produce the final, polished SOW incorporating all improvements.
 Return ONLY the revised SOW, not the critique or commentary."""
-    
+
     revision_messages = [
         SystemMessage(content=revision_system),
-        HumanMessage(content=revision_prompt)
+        HumanMessage(content=revision_prompt),
     ]
     final_sow = llm.invoke(revision_messages).content
-    
+
     return final_sow
 
 
 @tool
 def generate_section(
     section_name: Annotated[str, "Name of the section to generate"],
-    context: Annotated[Dict, "Context information for generation"],
+    context: Annotated[dict, "Context information for generation"],
 ) -> str:
     """
     Generate a specific section of the SOW.
@@ -293,7 +293,7 @@ Return the revised section."""
 
 
 @tool
-def generate_summary(documents: Annotated[List[str], "List of documents to summarize"]) -> str:
+def generate_summary(documents: Annotated[list[str], "List of documents to summarize"]) -> str:
     """
     Generate a summary of multiple documents.
 

@@ -4,8 +4,6 @@ Document retriever for RAG pipeline.
 Handles semantic search over indexed documents.
 """
 
-from typing import Dict, List
-
 from src.agent.config import config
 from src.rag.embeddings import BedrockEmbeddings
 
@@ -34,8 +32,8 @@ class DocumentRetriever:
         self,
         query: str,
         n_results: int = 5,
-        filters: Dict[str, str] | None = None,
-    ) -> List[Dict[str, str]]:
+        filters: dict[str, str] | None = None,
+    ) -> list[dict[str, str]]:
         """
         Search for relevant documents.
 
@@ -80,7 +78,7 @@ class DocumentRetriever:
 
         return formatted_results
 
-    def search_by_client(self, query: str, client_id: str, n_results: int = 5) -> List[Dict]:
+    def search_by_client(self, query: str, client_id: str, n_results: int = 5) -> list[dict]:
         """
         Search for documents related to a specific client.
 
@@ -94,7 +92,7 @@ class DocumentRetriever:
         """
         return self.search(query, n_results, filters={"client_id": client_id})
 
-    def search_by_product(self, query: str, product: str, n_results: int = 5) -> List[Dict]:
+    def search_by_product(self, query: str, product: str, n_results: int = 5) -> list[dict]:
         """
         Search for documents related to a specific product.
 

@@ -5,6 +5,7 @@ Centralized CSS for the "Cuscal" Enterprise Dark Theme.
 
 import streamlit as st
 
+
 def apply_custom_css():
     """
     Applies the global custom CSS for the Cuscal brand theme.
@@ -555,6 +556,7 @@ def apply_custom_css():
         unsafe_allow_html=True,
     )
 
+
 def main_header(title: str, subtitle: str):
     """
     Renders the consistent main header.
@@ -567,5 +569,5 @@ def main_header(title: str, subtitle: str):
             <p style="color: #888;">{subtitle}</p>
         </div>
         """,
-        unsafe_allow_html=True
+        unsafe_allow_html=True,
     )

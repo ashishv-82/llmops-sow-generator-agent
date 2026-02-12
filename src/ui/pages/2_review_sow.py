@@ -2,26 +2,30 @@
 SOW Review page.
 """
 
-import streamlit as st
-import requests
 import io
 import sys
 from pathlib import Path
+
+import requests
+import streamlit as st
 
 # Add project root to sys.path
 root_path = Path(__file__).parent.parent.parent.parent
 if str(root_path) not in sys.path:
     sys.path.append(str(root_path))
 
-from src.ui.components.styles import apply_custom_css, main_header
+from src.ui.components.styles import apply_custom_css
+
 try:
     from pypdf import PdfReader
+
     HAS_PDF = True
 except ImportError:
     HAS_PDF = False
 
 try:
     from docx import Document
+
     HAS_DOCX = True
 except ImportError:
     HAS_DOCX = False
@@ -32,7 +36,8 @@ st.set_page_config(page_title="Review SOW", page_icon="✅", layout="wide")
 apply_custom_css()
 
 # Page-specific CSS overrides (Matches Generate SOW)
-st.markdown("""
+st.markdown(
+    """
 <style>
     /* Force white text on primary buttons */
     div[data-testid="stButton"] > button[kind="primary"] p, 
@@ -49,7 +54,9 @@ st.markdown("""
         color: white !important;
     }
 </style>
-""", unsafe_allow_html=True)
+""",
+    unsafe_allow_html=True,
+)
 
 # Initialize Session State
 if "review_result" not in st.session_state:
@@ -57,12 +64,15 @@ if "review_result" not in st.session_state:
 
 # Header
 # Dashboard Header
-st.markdown("""
+st.markdown(
+    """
     <div style="margin-bottom: 1.5rem;">
         <h1 style="font-size: 1.75rem; font-weight: 700; margin-bottom: 0.25rem;">Review Statement of Work</h1>
         <p style="color: #666; font-size: 0.85rem;">Analyze SOWs for compliance with mandatory clauses and prohibited terms.</p>
     </div>
-""", unsafe_allow_html=True)
+""",
+    unsafe_allow_html=True,
+)
 
 # API Configuration
 API_URL = "http://localhost:8000"
@@ -79,17 +89,17 @@ sow_text = ""
 with col_upload:
     # 1. Upload Section
     st.markdown('<span class="section-tag">Document Source</span>', unsafe_allow_html=True)
-    
+
     uploaded_file = st.file_uploader(
-        "Upload SOW (PDF, DOCX, MD, TXT)", 
+        "Upload SOW (PDF, DOCX, MD, TXT)",
         type=["pdf", "docx", "md", "txt"],
-        help="Drag and drop your SOW file here"
+        help="Drag and drop your SOW file here",
     )
-    
+
     if uploaded_file is not None:
-        file_type = uploaded_file.name.split('.')[-1].lower()
+        file_type = uploaded_file.name.split(".")[-1].lower()
         try:
-            if file_type == 'pdf':
+            if file_type == "pdf":
                 if HAS_PDF:
                     reader = PdfReader(uploaded_file)
                     text = []
@@ -99,8 +109,8 @@ with col_upload:
                     st.success(f"✅ Extracted {len(sow_text)} chars from PDF")
                 else:
                     st.error("❌ pypdf library missing.")
-            
-            elif file_type in ['docx', 'doc']:
+
+            elif file_type in ["docx", "doc"]:
                 if HAS_DOCX:
                     doc = Document(uploaded_file)
                     text = [p.text for p in doc.paragraphs]
@@ -108,12 +118,12 @@ with col_upload:
                     st.success(f"✅ Extracted {len(sow_text)} chars from DOCX")
                 else:
                     st.error("❌ python-docx library missing.")
-            
-            else: # md, txt
+
+            else:  # md, txt
                 stringio = io.StringIO(uploaded_file.getvalue().decode("utf-8"))
                 sow_text = stringio.read()
                 st.success(f"✅ Loaded {uploaded_file.name}")
-                
+
         except Exception as e:
             st.error(f"Error reading file: {str(e)}")
 
@@ -122,21 +132,24 @@ with col_upload:
         value=sow_text,
         height=400,
         placeholder="Paste SOW text here if not uploading...",
-        help="Edit content before analyzing"
+        help="Edit content before analyzing",
     )
 
 with col_settings:
     # 2. Configuration
     st.markdown('<span class="section-tag">Analysis Settings</span>', unsafe_allow_html=True)
-    
+
     with st.form("review_settings"):
         product = st.text_input("Product Name", placeholder="e.g., Real-Time Payments")
         client_tier = st.selectbox("Client Tier", ["HIGH", "MEDIUM", "LOW", ""])
         st.markdown("<br>", unsafe_allow_html=True)
-        analyze_btn = st.form_submit_button("🔍 Analyze SOW", type="primary", use_container_width=True)
+        analyze_btn = st.form_submit_button(
+            "🔍 Analyze SOW", type="primary", use_container_width=True
+        )
 
     # Review Guidance (Moved from Sidebar) - Wrapped in SaaS Card
-    st.markdown("""
+    st.markdown(
+        """
 <div class="saas-card">
 <div class="tip-group" style="padding-top: 0; border-top: none; gap: 10px;">
 <span class="section-tag" style="margin-bottom: 0.5rem;">Review Guidance</span>
@@ -169,7 +182,9 @@ with col_settings:
 </div>
 </div>
 </div>
-""", unsafe_allow_html=True)
+""",
+        unsafe_allow_html=True,
+    )
 
 # Analysis Logic
 if analyze_btn:
@@ -179,24 +194,26 @@ if analyze_btn:
         with st.spinner("Analyzing compliance rules... This may take 1-2 minutes with Nova Pro."):
             # Construct payload
             payload = {"sow_text": sow_text_input}
-            if product: payload["product"] = product
-            if client_tier: payload["client_tier"] = client_tier
-            
+            if product:
+                payload["product"] = product
+            if client_tier:
+                payload["client_tier"] = client_tier
+
             try:
                 response = requests.post(f"{API_URL}/api/v1/sow/review", json=payload, timeout=300)
-                
+
                 if response.status_code == 200:
                     st.session_state.review_result = response.json()
                     # Store input text too for display
-                    st.session_state.review_text = sow_text_input 
+                    st.session_state.review_text = sow_text_input
                     st.rerun()
                 else:
                     st.error(f"API Error: {response.text}")
-                    
+
             except requests.exceptions.Timeout:
-                 st.error("❌ Request timed out.")
+                st.error("❌ Request timed out.")
             except requests.exceptions.ConnectionError:
-                 st.error("❌ Could not connect to API.")
+                st.error("❌ Could not connect to API.")
             except Exception as e:
                 st.error(f"Error: {str(e)}")
 
@@ -204,16 +221,17 @@ if analyze_btn:
 if st.session_state.review_result:
     result = st.session_state.review_result
     sow_content = st.session_state.get("review_text", "")
-    
-    score = result['compliance_score']
-    status = result['status']
-    summary = result['summary']
-    issues = result.get('issues', [])
-    
+
+    score = result["compliance_score"]
+    status = result["status"]
+    summary = result["summary"]
+    issues = result.get("issues", [])
+
     st.markdown("<br>", unsafe_allow_html=True)
-    
+
     # 1. Action Toolbar
-    st.markdown("""
+    st.markdown(
+        """
 <style>
     .integrated-toolbar {
         background: #111;
@@ -226,20 +244,26 @@ if st.session_state.review_result:
         align-items: center;
     }
 </style>
-""", unsafe_allow_html=True)
-    
+""",
+        unsafe_allow_html=True,
+    )
+
     st.markdown('<div class="integrated-toolbar">', unsafe_allow_html=True)
     c1, c2 = st.columns([1, 1])
     with c1:
-        st.markdown(f"**Analysis Complete** &nbsp; <span style='color:#666'>|</span> &nbsp; Score: **{score}/100**", unsafe_allow_html=True)
+        st.markdown(
+            f"**Analysis Complete** &nbsp; <span style='color:#666'>|</span> &nbsp; Score: **{score}/100**",
+            unsafe_allow_html=True,
+        )
     with c2:
         if st.button("Clear Results", type="secondary", use_container_width=False):
             st.session_state.review_result = None
             st.rerun()
-    st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown("</div>", unsafe_allow_html=True)
 
     # 2. Compliance Report (Top-Posted)
-    st.markdown(f"""
+    st.markdown(
+        f"""
 <div class="saas-card" style="border-left: 4px solid #D92D20; background: rgba(217, 45, 32, 0.03); margin-bottom: 2rem;">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
         <div style="display: flex; align-items: center; gap: 12px;">
@@ -272,37 +296,49 @@ if st.session_state.review_result:
     </div>
 </div>
 </div>
-""", unsafe_allow_html=True)
+""",
+        unsafe_allow_html=True,
+    )
 
     # Detailed Issues
     if issues:
         st.subheader("Risk Analysis Details")
         for issue in issues:
-            severity_icon = "🔴" if issue['severity'] == "HIGH" else "🟡" if issue['severity'] == "MEDIUM" else "🟢"
-            
+            severity_icon = (
+                "🔴"
+                if issue["severity"] == "HIGH"
+                else "🟡" if issue["severity"] == "MEDIUM" else "🟢"
+            )
+
             # Create a more descriptive label
             label = f"{severity_icon} {issue['category']}"
-            if "Prohibited Term" in issue['category']:
-                term = issue['description'].replace("Found prohibited term: ", "")
+            if "Prohibited Term" in issue["category"]:
+                term = issue["description"].replace("Found prohibited term: ", "")
                 label += f": {term}"
-            elif "Mandatory Clause" in issue['category']:
-                clause = issue['description'].replace("Missing required clause: ", "")
+            elif "Mandatory Clause" in issue["category"]:
+                clause = issue["description"].replace("Missing required clause: ", "")
                 label += f": {clause}"
-            
+
             with st.expander(label):
                 st.write(f"**Description:** {issue['description']}")
                 st.info(f"💡 **Suggestion:** {issue['suggestion']}")
     else:
         st.balloons()
         st.success("🎉 No compliance issues found! Perfect score.")
-        
+
     st.markdown("<br>", unsafe_allow_html=True)
 
     # 3. Document Canvas
     if sow_content:
-        st.markdown('<span class="section-tag" style="margin-left: 4px;">Analyzed Document</span>', unsafe_allow_html=True)
-        st.markdown(f"""
+        st.markdown(
+            '<span class="section-tag" style="margin-left: 4px;">Analyzed Document</span>',
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            f"""
     <div class="document-canvas" style="border-radius: 12px; margin-top: 0.5rem;">
     {sow_content}
     </div>
-    """, unsafe_allow_html=True)
+    """,
+            unsafe_allow_html=True,
+        )

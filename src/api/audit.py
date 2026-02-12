@@ -6,11 +6,12 @@ Logs all API calls to JSON files locally (production will use DynamoDB).
 
 import json
 import logging
+import time
+from collections.abc import Callable
 from datetime import datetime
 from functools import wraps
 from pathlib import Path
-from typing import Any, Callable, Dict
-import time
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -29,8 +30,8 @@ class AuditLogger:
         self,
         endpoint: str,
         method: str,
-        request_data: Dict[str, Any],
-        response_data: Dict[str, Any],
+        request_data: dict[str, Any],
+        response_data: dict[str, Any],
         duration_seconds: float,
         status_code: int,
         user: str = "anonymous",
@@ -60,7 +61,7 @@ class AuditLogger:
 
         # Write to daily log file
         log_file = self._get_log_file()
-        
+
         try:
             # Append to file
             with open(log_file, "a") as f:
@@ -68,18 +69,18 @@ class AuditLogger:
         except Exception as e:
             logger.error(f"Failed to write audit log: {e}")
 
-    def _summarize_response(self, response: Dict[str, Any]) -> Dict[str, Any]:
+    def _summarize_response(self, response: dict[str, Any]) -> dict[str, Any]:
         """
         Create summary of response (avoid logging huge SOW text).
-        
+
         Args:
             response: Full response data
-            
+
         Returns:
             Summarized response
         """
         summary = {}
-        
+
         for key, value in response.items():
             if key == "sow_text" and isinstance(value, str):
                 # Summarize SOW text
@@ -89,7 +90,7 @@ class AuditLogger:
                 summary[key] = value[:500] + "..."
             else:
                 summary[key] = value
-        
+
         return summary
 
     def _get_log_file(self) -> Path:
@@ -105,43 +106,44 @@ audit_logger = AuditLogger()
 def audit_endpoint(endpoint_name: str):
     """
     Decorator to audit API endpoint calls.
-    
+
     Usage:
         @router.post("/api/v1/sow/create")
         @audit_endpoint("sow_create")
         async def create_sow(...):
             ...
-    
+
     Args:
         endpoint_name: Descriptive name for the endpoint
     """
+
     def decorator(func: Callable) -> Callable:
         @wraps(func)
         async def wrapper(*args, **kwargs):
             start_time = time.time()
             status_code = 200
             response_data = {}
-            
+
             try:
                 # Call the actual endpoint
                 result = await func(*args, **kwargs)
-                
+
                 # Convert Pydantic model to dict if needed
                 if hasattr(result, "model_dump"):
                     response_data = result.model_dump()
                 else:
                     response_data = result
-                
+
                 return result
-                
+
             except Exception as e:
                 status_code = 500
                 response_data = {"error": str(e)}
                 raise
-                
+
             finally:
                 duration = time.time() - start_time
-                
+
                 # Extract request data from kwargs
                 request_data = {}
                 if "request" in kwargs:
@@ -150,7 +152,7 @@ def audit_endpoint(endpoint_name: str):
                         request_data = req.model_dump()
                     else:
                         request_data = {"body": str(req)}
-                
+
                 # Log the request
                 audit_logger.log_request(
                     endpoint=endpoint_name,
@@ -160,6 +162,7 @@ def audit_endpoint(endpoint_name: str):
                     duration_seconds=duration,
                     status_code=status_code,
                 )
-        
+
         return wrapper
+
     return decorator

@@ -2,12 +2,13 @@
 SOW Generation page - Compact Split-Pane Layout.
 """
 
-import streamlit as st
-import requests
 import json
 import sys
 import time
 from pathlib import Path
+
+import requests
+import streamlit as st
 
 # Add project root to sys.path
 root_path = Path(__file__).parent.parent.parent.parent
@@ -28,7 +29,8 @@ if "compliance_report" not in st.session_state:
     st.session_state.compliance_report = None
 
 # Page-specific CSS overrides
-st.markdown("""
+st.markdown(
+    """
 <style>
     /* Force white text on primary buttons */
     div[data-testid="stButton"] > button[kind="primary"] p {
@@ -76,31 +78,38 @@ st.markdown("""
         line-height: 1.8 !important;
     }
 </style>
-""", unsafe_allow_html=True)
+""",
+    unsafe_allow_html=True,
+)
 
 # API Configuration
 API_URL = "http://localhost:8000"
 
 # Dashboard Header
-st.markdown("""
+st.markdown(
+    """
     <div style="margin-bottom: 1.5rem;">
         <h1 style="font-size: 1.75rem; font-weight: 700; margin-bottom: 0.25rem;">Create New SOW</h1>
         <p style="color: #666; font-size: 0.85rem;">Specify client and deal parameters to generate a production-ready Statement of Work.</p>
     </div>
-""", unsafe_allow_html=True)
+""",
+    unsafe_allow_html=True,
+)
+
 
 # Load Mock Data
 @st.cache_data
 def load_mock_data():
     try:
         data_path = root_path / "data"
-        with open(data_path / "mock_crm.json", "r") as f:
+        with open(data_path / "mock_crm.json") as f:
             crm_data = json.load(f)
-        with open(data_path / "mock_opportunities.json", "r") as f:
+        with open(data_path / "mock_opportunities.json") as f:
             opp_data = json.load(f)
         return crm_data, opp_data
-    except Exception as e:
+    except Exception:
         return {"clients": []}, {"opportunities": []}
+
 
 crm_data, opp_data = load_mock_data()
 
@@ -111,7 +120,9 @@ client_names = list(client_map.keys())
 
 opps = opp_data.get("opportunities", [])
 products = sorted(list(set(o["product"] for o in opps if o.get("product"))))
-if not products: products = ["Real-Time Payments", "Open Banking", "AI Fraud Monitor"]
+if not products:
+    products = ["Real-Time Payments", "Open Banking", "AI Fraud Monitor"]
+
 
 # Helper: Update client tier based on selection
 def update_tier():
@@ -121,6 +132,7 @@ def update_tier():
         new_tier = c_data.get("compliance_tier", "MEDIUM")
         st.session_state["tier_select"] = new_tier
 
+
 # Handle submission (Always runs if session state doesn't have a result yet)
 if not st.session_state.sow_result:
     # Split-Pane Layout: Left (Form) | Right (Context)
@@ -129,7 +141,7 @@ if not st.session_state.sow_result:
     with col_left:
         # Simplified Section Title
         st.markdown('<div style="margin-bottom: 1.5rem;"></div>', unsafe_allow_html=True)
-        
+
         # Row 1: Client + Tier
         c1, c2 = st.columns(2)
         with c1:
@@ -139,24 +151,26 @@ if not st.session_state.sow_result:
                 index=None,
                 placeholder="Select a client...",
                 key="client_select",
-                on_change=update_tier
+                on_change=update_tier,
             )
-        
+
         with c2:
             client_tier = st.selectbox(
                 "Client Tier",
                 options=["HIGH", "MEDIUM", "LOW"],
                 index=None,
                 placeholder="Select a tier...",
-                key="tier_select"
+                key="tier_select",
             )
-        
+
         # Get Client Data
         client_id = ""
         if selected_client and selected_client in client_map:
             client_data = client_map[selected_client]
             client_id = client_data["id"]
-            st.caption(f"📍 **ID:** {client_id} | **Industry:** {client_data.get('industry', 'N/A')}")
+            st.caption(
+                f"📍 **ID:** {client_id} | **Industry:** {client_data.get('industry', 'N/A')}"
+            )
 
         # Row 2: Product + Quality Mode
         c1, c2 = st.columns(2)
@@ -166,26 +180,26 @@ if not st.session_state.sow_result:
                 options=products,
                 index=None,
                 placeholder="Select a product...",
-                key="product_select"
+                key="product_select",
             )
-        
+
         with c2:
             quality_mode = st.selectbox(
                 "Quality Mode",
                 options=["quick", "production"],
                 format_func=lambda x: "Quick Draft" if x == "quick" else "Production Quality",
-                key="quality_select"
+                key="quality_select",
             )
-        
+
         # Row 3: Requirements
         requirements = st.text_area(
             "Additional Requirements (optional)",
             placeholder="e.g., Include migration plan, 6-month timeline, dedicated support",
-            height=80
+            height=80,
         )
-        
+
         st.markdown("<br>", unsafe_allow_html=True)
-        
+
         # Row 4: Generate Button
         submit = st.button("Generate SOW", use_container_width=True, type="primary")
 
@@ -195,13 +209,14 @@ if not st.session_state.sow_result:
         est_time = "1m - 2m"
         est_cost = "$0.06 - $0.23"
         model_name = "Amazon Nova Pro"
-        
+
         if quality_mode == "quick":
             est_time = "45s - 60s"
             est_cost = "$0.01 - $0.05"
-        
+
         # Unified SaaS Card: Job Details + Pro Tips
-        st.markdown(f"""
+        st.markdown(
+            f"""
 <div class="saas-card" style="padding: 1.25rem;">
 <span class="section-tag" style="margin-bottom: 0.5rem;">Job Summary</span>
 <div class="metric-group" style="gap: 8px; margin-bottom: 1.25rem;">
@@ -254,7 +269,9 @@ if not st.session_state.sow_result:
 </div>
 </div>
 </div>
-""", unsafe_allow_html=True)
+""",
+            unsafe_allow_html=True,
+        )
 
     # Handle submission logic within the if block
     if submit:
@@ -264,22 +281,23 @@ if not st.session_state.sow_result:
             # Clear previous state on new generation
             st.session_state.sow_result = None
             st.session_state.compliance_report = None
-            
+
             # Prepare request
             payload = {
                 "client_id": client_id,
                 "product": product,
                 "quality_mode": quality_mode,
             }
-            
+
             if requirements:
                 payload["requirements"] = requirements
-                
+
             if client_tier:
-                 payload["client_tier"] = client_tier
-            
+                payload["client_tier"] = client_tier
+
             # CSS for Status Container Styling
-            st.markdown("""
+            st.markdown(
+                """
 <style>
     div[data-testid="stStatus"] {
         border: 1px solid #D92D20 !important;
@@ -288,21 +306,25 @@ if not st.session_state.sow_result:
         font-family: 'Courier New', monospace !important;
     }
 </style>
-""", unsafe_allow_html=True)
-            
+""",
+                unsafe_allow_html=True,
+            )
+
             status_placeholder = st.empty()
             with status_placeholder.status("Processing Request...", expanded=True) as status:
                 st.write("› Scanning Client Knowledge Base...")
                 time.sleep(0.8)
                 st.write("› Drafting Scope of Work...")
-                
+
                 try:
-                    response = requests.post(f"{API_URL}/api/v1/sow/create", json=payload, timeout=300)
+                    response = requests.post(
+                        f"{API_URL}/api/v1/sow/create", json=payload, timeout=300
+                    )
                     if response.status_code == 200:
                         status.update(label="Generation Complete", state="complete", expanded=False)
                         time.sleep(0.5)
                         status_placeholder.empty()
-                        
+
                         st.session_state.sow_result = response.json()
                         st.rerun()
                     else:
@@ -312,12 +334,13 @@ if not st.session_state.sow_result:
 
 else:
     # CONFIGURATION SUMMARY BAR (Result Mode)
-    client_val = st.session_state.get('client_select', 'N/A')
-    client_name_only = client_val.split(' (')[0] if '(' in client_val else client_val
-    
+    client_val = st.session_state.get("client_select", "N/A")
+    client_name_only = client_val.split(" (")[0] if "(" in client_val else client_val
+
     col_sum1, col_sum2 = st.columns([4, 1])
     with col_sum1:
-        st.markdown(f"""
+        st.markdown(
+            f"""
 <div class="saas-card" style="padding: 10px 20px; margin-bottom: 0; background: rgba(255,255,255,0.02); border-color: rgba(255,255,255,0.1); display: flex; align-items: center; gap: 16px;">
     <div class="telemetry-tag" style="background: rgba(16, 185, 129, 0.1); color: #10B981; border-color: rgba(16, 185, 129, 0.2); margin-bottom:0;">Result Ready</div>
     <div style="font-size: 0.85rem; color: #fff; font-family: var(--font-family);">
@@ -326,8 +349,10 @@ else:
         <span style="color: #666;">View Mode:</span> <b>Statement of Work Preview</b>
     </div>
 </div>
-""", unsafe_allow_html=True)
-    
+""",
+            unsafe_allow_html=True,
+        )
+
     with col_sum2:
         if st.button("Edit Config", use_container_width=True):
             st.session_state.sow_result = None
@@ -338,13 +363,14 @@ else:
 if st.session_state.sow_result:
     result = st.session_state.sow_result
     # Retrieve configuration from session state keys
-    product_val = st.session_state.get('product_select', 'N/A')
-    tier_val = st.session_state.get('tier_select', 'MEDIUM')
-    client_val = st.session_state.get('client_select', 'N/A')
-    c_id = client_map[client_val]['id'] if client_val in client_map else "N/A"
-    
+    product_val = st.session_state.get("product_select", "N/A")
+    tier_val = st.session_state.get("tier_select", "MEDIUM")
+    client_val = st.session_state.get("client_select", "N/A")
+    c_id = client_map[client_val]["id"] if client_val in client_map else "N/A"
+
     # 1. Document Header (Integrated Toolbar)
-    st.markdown(f"""
+    st.markdown(
+        f"""
 <div class="document-toolbar" style="margin-top: 1rem; border-bottom: none; border-radius: 12px 12px 0 0; background: #111;">
     <div style="display: flex; align-items: center; gap: 12px;">
         <div class="telemetry-tag" style="background: rgba(16, 185, 129, 0.1); color: #10B981; border-color: rgba(16, 185, 129, 0.2); margin-bottom:0;">Ready</div>
@@ -353,10 +379,13 @@ if st.session_state.sow_result:
         </div>
     </div>
 </div>
-""", unsafe_allow_html=True)
-    
+""",
+        unsafe_allow_html=True,
+    )
+
     # 2. Action Toolbar (Buttons) - Integrated via negative margin
-    st.markdown("""
+    st.markdown(
+        """
 <style>
     .integrated-toolbar {
         background: #111;
@@ -368,33 +397,41 @@ if st.session_state.sow_result:
         gap: 8px;
     }
 </style>
-""", unsafe_allow_html=True)
-    
+""",
+        unsafe_allow_html=True,
+    )
+
     st.markdown('<div class="integrated-toolbar">', unsafe_allow_html=True)
     col_t1, col_t2, col_t3 = st.columns([2, 1, 1], gap="small")
     with col_t1:
-        compliance_check = st.button("Run Compliance Check", type="primary", use_container_width=True, key="compliance_btn_top")
+        compliance_check = st.button(
+            "Run Compliance Check",
+            type="primary",
+            use_container_width=True,
+            key="compliance_btn_top",
+        )
     with col_t2:
         st.download_button(
             label="Download PDF",
-            data=result['sow_text'],
+            data=result["sow_text"],
             file_name=f"SOW_{c_id}_{product_val.replace(' ', '_')}.md",
             mime="text/markdown",
-            use_container_width=True
+            use_container_width=True,
         )
     with col_t3:
         if st.button("Copy Text", use_container_width=True):
             st.toast("Text copied!")
-    st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown("</div>", unsafe_allow_html=True)
 
     # Render Compliance Report if it exists in session state
     if st.session_state.compliance_report:
         review = st.session_state.compliance_report
-        score = review['compliance_score']
-        status = review['status']
-        
+        score = review["compliance_score"]
+        status = review["status"]
+
         # Modern Compliance Report Card
-        st.markdown(f"""
+        st.markdown(
+            f"""
 <div class="saas-card" style="border-left: 4px solid #D92D20; background: rgba(217, 45, 32, 0.03); margin-top: 2rem; margin-bottom: 2rem;">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
         <div style="display: flex; align-items: center; gap: 12px;">
@@ -427,41 +464,53 @@ if st.session_state.sow_result:
     </div>
 </div>
 </div>
-""", unsafe_allow_html=True)
-        
+""",
+            unsafe_allow_html=True,
+        )
+
         # Detailed Issues
-        if review['issues']:
+        if review["issues"]:
             st.subheader("Risk Analysis Details")
-            for issue in review['issues']:
-                severity_icon = "🔴" if issue['severity'] == "HIGH" else "🟡" if issue['severity'] == "MEDIUM" else "🟢"
-                
+            for issue in review["issues"]:
+                severity_icon = (
+                    "🔴"
+                    if issue["severity"] == "HIGH"
+                    else "🟡" if issue["severity"] == "MEDIUM" else "🟢"
+                )
+
                 # Create a more descriptive label
                 label = f"{severity_icon} {issue['category']}"
-                if "Prohibited Term" in issue['category']:
-                    term = issue['description'].replace("Found prohibited term: ", "")
+                if "Prohibited Term" in issue["category"]:
+                    term = issue["description"].replace("Found prohibited term: ", "")
                     label += f": {term}"
-                elif "Mandatory Clause" in issue['category']:
-                    clause = issue['description'].replace("Missing required clause: ", "")
+                elif "Mandatory Clause" in issue["category"]:
+                    clause = issue["description"].replace("Missing required clause: ", "")
                     label += f": {clause}"
-                
+
                 with st.expander(label):
                     st.write(f"**Description:** {issue['description']}")
                     st.info(f"💡 **Suggestion:** {issue['suggestion']}")
-    
+
     # Border-flush divider
-    st.markdown("""
+    st.markdown(
+        """
 <div style="background: #111; border: 1px solid #222; border-top: none; border-radius: 0 0 12px 12px; height: 1px; margin-top: -1px; margin-bottom: 0;"></div>
-""", unsafe_allow_html=True)
+""",
+        unsafe_allow_html=True,
+    )
 
     # 3. Document Canvas (No gap between header and canvas)
-    st.markdown(f"""
+    st.markdown(
+        f"""
 <div class="document-canvas" style="border-top: none; border-radius: 0 0 12px 12px; margin-top: -1px;">
 {result['sow_text']}
 </div>
-""", unsafe_allow_html=True)
-    
+""",
+        unsafe_allow_html=True,
+    )
+
     st.markdown("<br><br>", unsafe_allow_html=True)
-    
+
     # Compliance check logic (Stores to session state)
     if compliance_check:
         with st.spinner("Checking compliance..."):
@@ -469,18 +518,17 @@ if st.session_state.sow_result:
                 review_response = requests.post(
                     f"{API_URL}/api/v1/sow/review",
                     json={
-                        "sow_text": result['sow_text'],
+                        "sow_text": result["sow_text"],
                         "product": product_val,
-                        "client_tier": tier_val
-                    }
+                        "client_tier": tier_val,
+                    },
                 )
-                
+
                 if review_response.status_code == 200:
                     st.session_state.compliance_report = review_response.json()
                     st.rerun()
                 else:
                     st.error(f"❌ Error: {review_response.status_code} - {review_response.text}")
-                    
+
             except Exception as e:
                 st.error(f"❌ Error during compliance check: {str(e)}")
-

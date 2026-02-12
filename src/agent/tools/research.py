@@ -6,7 +6,7 @@ Provides tools to search CRM, opportunities, historical SOWs, product KB, and co
 
 import json
 from pathlib import Path
-from typing import Annotated, Dict, List
+from typing import Annotated
 
 from langchain_core.tools import tool
 
@@ -17,7 +17,7 @@ DATA_DIR = Path(__file__).parent.parent.parent.parent / "data"
 
 
 @tool
-def search_crm(client_name: Annotated[str, "Name of the client to search for"]) -> Dict:
+def search_crm(client_name: Annotated[str, "Name of the client to search for"]) -> dict:
     """
     Search the CRM for client information.
 
@@ -34,13 +34,15 @@ def search_crm(client_name: Annotated[str, "Name of the client to search for"]) 
     if not crm_file.exists():
         return {"error": "CRM data file not found"}
 
-    with open(crm_file, "r") as f:
+    with open(crm_file) as f:
         data = json.load(f)
 
     # Search for client (case-insensitive partial match on name or exact match on ID)
     client_name_lower = client_name.lower()
     for client in data.get("clients", []):
-        if (client_name_lower in client["name"].lower()) or (client_name_lower == client["id"].lower()):
+        if (client_name_lower in client["name"].lower()) or (
+            client_name_lower == client["id"].lower()
+        ):
             return client
 
     return {"error": f"Client '{client_name}' not found in CRM"}
@@ -48,8 +50,8 @@ def search_crm(client_name: Annotated[str, "Name of the client to search for"]) 
 
 @tool
 def search_opportunities(
-    client_id: Annotated[str, "Client ID to search opportunities for"]
-) -> List[Dict]:
+    client_id: Annotated[str, "Client ID to search opportunities for"],
+) -> list[dict]:
     """
     Search for past opportunities and deals for a client.
 
@@ -66,7 +68,7 @@ def search_opportunities(
     if not opportunities_file.exists():
         return [{"error": "Opportunities data file not found"}]
 
-    with open(opportunities_file, "r") as f:
+    with open(opportunities_file) as f:
         data = json.load(f)
 
     # Filter opportunities by client_id
@@ -85,7 +87,7 @@ def search_historical_sows(
     query: Annotated[str, "Search query describing what to look for"],
     client_id: Annotated[str | None, "Optional client ID filter"] = None,
     product: Annotated[str | None, "Optional product name filter"] = None,
-) -> List[Dict]:
+) -> list[dict]:
     """
     Search historical SOW documents using semantic search.
 
@@ -128,7 +130,7 @@ def search_historical_sows(
 
 
 @tool
-def search_product_kb(product: Annotated[str, "Product name to search for"]) -> Dict:
+def search_product_kb(product: Annotated[str, "Product name to search for"]) -> dict:
     """
     Search the product knowledge base.
 
@@ -144,14 +146,15 @@ def search_product_kb(product: Annotated[str, "Product name to search for"]) -> 
     products_file = DATA_DIR / "mock_products.json"
     if products_file.exists():
         try:
-            with open(products_file, "r") as f:
+            with open(products_file) as f:
                 product_data = json.load(f)
-            
+
             for p in product_data.get("products", []):
                 # Check for name or alias match
-                if (product.lower() in p["name"].lower()) or \
-                   (product.lower() in [a.lower() for a in p.get("aliases", [])]):
-                    
+                if (product.lower() in p["name"].lower()) or (
+                    product.lower() in [a.lower() for a in p.get("aliases", [])]
+                ):
+
                     return {
                         "name": p["name"],
                         "category": p["category"],
@@ -160,7 +163,7 @@ def search_product_kb(product: Annotated[str, "Product name to search for"]) -> 
                         "features": p["features"],
                         "technical_requirements": p["technical_requirements"],
                         "sla_tier": p.get("sla_tier", "Standard"),
-                        "source": "Internal Product Catalog (Demo)"
+                        "source": "Internal Product Catalog (Demo)",
                     }
         except Exception as e:
             # Fallback to RAG if mock file read fails
@@ -192,7 +195,7 @@ def search_product_kb(product: Annotated[str, "Product name to search for"]) -> 
 def search_compliance_kb(
     client_tier: Annotated[str, "Client compliance tier (HIGH, MEDIUM, LOW)"],
     product: Annotated[str | None, "Optional product name"] = None,
-) -> Dict:
+) -> dict:
     """
     Search compliance requirements knowledge base.
 
@@ -210,7 +213,7 @@ def search_compliance_kb(
     if not compliance_file.exists():
         return {"error": "Compliance rules file not found"}
 
-    with open(compliance_file, "r") as f:
+    with open(compliance_file) as f:
         data = json.load(f)
 
     # Get requirements for tier

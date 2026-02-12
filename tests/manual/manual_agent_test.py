@@ -38,7 +38,7 @@ print()
 
 try:
     choice = input("Enter choice (1-4): ").strip()
-    
+
     if choice in ["1", "2", "3"]:
         query = test_queries[int(choice) - 1]
     elif choice == "4":
@@ -46,13 +46,13 @@ try:
     else:
         print("Invalid choice")
         sys.exit(1)
-    
+
     print()
     print("=" * 60)
     print(f"Query: {query}")
     print("=" * 60)
     print()
-    
+
     # Run agent
     print("Running agent...")
     print("-" * 60)
@@ -63,12 +63,13 @@ try:
     print("=" * 60)
     print(response)
     print()
-    
+
 except KeyboardInterrupt:
     print("\n\nTest cancelled by user.")
     sys.exit(0)
 except Exception as e:
     print(f"\n❌ Error: {e}")
     import traceback
+
     traceback.print_exc()
     sys.exit(1)

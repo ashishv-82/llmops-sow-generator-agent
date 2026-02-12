@@ -1,13 +1,13 @@
-import os
 import json
+import os
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 import pytest
 from fastapi.testclient import TestClient
 
-from src.api.main import app
 from src.agent.config import config
+from src.api.main import app
 
 
 @pytest.fixture
@@ -52,7 +52,7 @@ def sample_crm_data():
         "name": "Test Client",
         "industry": "Technology",
         "size": "Enterprise",
-        "compliance_tier": "HIGH"
+        "compliance_tier": "HIGH",
     }
 
 
@@ -62,5 +62,5 @@ def sample_product_data():
     return {
         "product": "Test Product",
         "content": "Test product description and features.",
-        "sources": ["test_source.md"]
+        "sources": ["test_source.md"],
     }
