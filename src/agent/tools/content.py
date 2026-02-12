@@ -13,6 +13,7 @@ from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_core.tools import tool
 
 from src.agent.config import config
+from typing import cast
 
 # Templates directory
 TEMPLATES_DIR = Path(__file__).parent.parent.parent.parent / "data" / "templates"
@@ -21,7 +22,7 @@ TEMPLATES_DIR = Path(__file__).parent.parent.parent.parent / "data" / "templates
 def _get_llm() -> ChatBedrock:
     """Get configured Bedrock LLM instance."""
     return ChatBedrock(
-        model_id=config.bedrock_model_id,
+        model=config.bedrock_model_id,
         client=config.bedrock_runtime,
         model_kwargs={
             "temperature": config.temperature,
@@ -91,7 +92,7 @@ Generate a complete, professional SOW following the template structure."""
     messages = [SystemMessage(content=system_prompt), HumanMessage(content=human_prompt)]
     response = llm.invoke(messages)
 
-    return response.content
+    return cast(str, response.content)
 
 
 @tool
@@ -160,7 +161,7 @@ Generate a complete, professional SOW following the template structure."""
         SystemMessage(content=generation_system),
         HumanMessage(content=generation_prompt),
     ]
-    initial_draft = llm.invoke(initial_messages).content
+    initial_draft = cast(str, llm.invoke(initial_messages).content)
 
     # STEP 2: Self-critique
     critique_system = """You are an expert SOW reviewer and compliance auditor.
@@ -192,7 +193,7 @@ Be constructive but thorough."""
         SystemMessage(content=critique_system),
         HumanMessage(content=critique_prompt),
     ]
-    critique = llm.invoke(critique_messages).content
+    critique = cast(str, llm.invoke(critique_messages).content)
 
     # STEP 3: Revise based on critique
     revision_system = """You are an expert SOW writer performing final revision.
@@ -219,7 +220,7 @@ Return ONLY the revised SOW, not the critique or commentary."""
         SystemMessage(content=revision_system),
         HumanMessage(content=revision_prompt),
     ]
-    final_sow = llm.invoke(revision_messages).content
+    final_sow = cast(str, llm.invoke(revision_messages).content)
 
     return final_sow
 
@@ -254,7 +255,7 @@ Return only the section content, properly formatted in markdown."""
     messages = [SystemMessage(content=system_prompt), HumanMessage(content=human_prompt)]
     response = llm.invoke(messages)
 
-    return response.content
+    return cast(str, response.content)
 
 
 @tool
@@ -289,7 +290,7 @@ Return the revised section."""
     messages = [SystemMessage(content=system_prompt), HumanMessage(content=human_prompt)]
     response = llm.invoke(messages)
 
-    return response.content
+    return cast(str, response.content)
 
 
 @tool
@@ -320,4 +321,4 @@ Provide a clear, structured summary of the key information."""
     messages = [SystemMessage(content=system_prompt), HumanMessage(content=human_prompt)]
     response = llm.invoke(messages)
 
-    return response.content
+    return cast(str, response.content)

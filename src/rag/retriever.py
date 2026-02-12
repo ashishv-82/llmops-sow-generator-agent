@@ -4,6 +4,8 @@ Document retriever for RAG pipeline.
 Handles semantic search over indexed documents.
 """
 
+from typing import Any, cast
+
 from src.agent.config import config
 from src.rag.embeddings import BedrockEmbeddings
 
@@ -33,7 +35,7 @@ class DocumentRetriever:
         query: str,
         n_results: int = 5,
         filters: dict[str, str] | None = None,
-    ) -> list[dict[str, str]]:
+    ) -> list[dict[str, Any]]:
         """
         Search for relevant documents.
 
@@ -45,17 +47,19 @@ class DocumentRetriever:
         Returns:
             List of result dictionaries with 'content', 'metadata', and 'score'
         """
+        from typing import Any
+
         # Generate query embedding
         query_embedding = self.embeddings.embed_query(query)
 
         # Build where clause from filters
-        where = None
+        where: dict[str, Any] | None = None
         if filters:
             if len(filters) > 1:
                 # Wrap multiple filters in $and operator
                 where = {"$and": [{k: v} for k, v in filters.items()]}
             else:
-                where = filters
+                where = cast(dict[str, Any], filters)
 
         # Query ChromaDB
         results = self.collection.query(

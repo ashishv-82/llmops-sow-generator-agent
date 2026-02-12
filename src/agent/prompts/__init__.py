@@ -26,10 +26,11 @@ def load_prompt(name: str) -> dict[str, Any]:
     if not prompt_file.exists():
         raise FileNotFoundError(f"Prompt file not found: {prompt_file}")
 
+    from typing import cast
     with open(prompt_file) as f:
         data = yaml.safe_load(f)
 
-    return data
+    return cast(dict[str, Any], data) if isinstance(data, dict) else {}
 
 
 def get_system_prompt(name: str) -> str:

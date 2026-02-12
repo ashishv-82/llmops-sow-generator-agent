@@ -152,6 +152,7 @@ async def review_sow(request: SOWReviewRequest):
                         severity="HIGH",
                         category="Mandatory Clause",
                         description=f"Missing required clause: {missing}",
+                        location="Unknown",
                         suggestion=f"Add clause: {missing}",
                     )
                 )

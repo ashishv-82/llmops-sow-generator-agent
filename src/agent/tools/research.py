@@ -6,7 +6,7 @@ Provides tools to search CRM, opportunities, historical SOWs, product KB, and co
 
 import json
 from pathlib import Path
-from typing import Annotated
+from typing import Annotated, Any, cast
 
 from langchain_core.tools import tool
 
@@ -17,7 +17,7 @@ DATA_DIR = Path(__file__).parent.parent.parent.parent / "data"
 
 
 @tool
-def search_crm(client_name: Annotated[str, "Name of the client to search for"]) -> dict:
+def search_crm(client_name: Annotated[str, "Name of the client to search for"]) -> dict[str, Any]:
     """
     Search the CRM for client information.
 
@@ -116,12 +116,13 @@ def search_historical_sows(
     # Format results
     formatted = []
     for result in results:
+        metadata = cast(dict[str, Any], result["metadata"])
         formatted.append(
             {
                 "content": result["content"],
-                "source": result["metadata"].get("file_name", "unknown"),
-                "client": result["metadata"].get("client_id", "unknown"),
-                "product": result["metadata"].get("product", "unknown"),
+                "source": metadata.get("file_name", "unknown"),
+                "client": metadata.get("client_id", "unknown"),
+                "product": metadata.get("product", "unknown"),
                 "relevance_score": result["score"],
             }
         )
@@ -187,7 +188,7 @@ def search_product_kb(product: Annotated[str, "Product name to search for"]) -> 
     return {
         "product": product,
         "content": content,
-        "sources": [r["metadata"].get("file_name", "unknown") for r in results],
+        "sources": [cast(dict[str, Any], r["metadata"]).get("file_name", "unknown") for r in results],
     }
 
 

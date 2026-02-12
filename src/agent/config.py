@@ -6,7 +6,7 @@ Loads environment variables and provides shared resources like Bedrock client an
 
 import os
 from pathlib import Path
-from typing import Optional
+from typing import Any, Optional
 
 import boto3
 import chromadb
@@ -53,13 +53,13 @@ class Config:
         self.log_level = os.getenv("LOG_LEVEL", "INFO")
 
         # Initialize clients
-        self._bedrock_runtime: boto3.client | None = None
-        self._chroma_client: chromadb.Client | None = None
+        self._bedrock_runtime: Any = None
+        self._chroma_client: Any = None
 
         self._initialized = True
 
     @property
-    def bedrock_runtime(self) -> boto3.client:
+    def bedrock_runtime(self) -> Any:
         """Get or create Bedrock Runtime client."""
         if self._bedrock_runtime is None:
             session = boto3.Session(profile_name=self.aws_profile)
@@ -69,7 +69,7 @@ class Config:
         return self._bedrock_runtime
 
     @property
-    def chroma_client(self) -> chromadb.Client:
+    def chroma_client(self) -> Any:
         """Get or create ChromaDB client."""
         if self._chroma_client is None:
             # Ensure persist directory exists

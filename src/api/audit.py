@@ -96,7 +96,8 @@ class AuditLogger:
     def _get_log_file(self) -> Path:
         """Get today's log file path."""
         today = datetime.utcnow().strftime("%Y-%m-%d")
-        return self.log_dir / f"audit_{today}.jsonl"
+        from typing import cast
+        return cast(Path, self.log_dir / f"audit_{today}.jsonl")
 
 
 # Global audit logger instance

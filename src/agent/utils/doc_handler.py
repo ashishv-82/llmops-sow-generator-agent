@@ -49,7 +49,7 @@ def _parse_pdf(file_path: Path) -> str:
 
 def _parse_docx(file_path: Path) -> str:
     """Extract text from DOCX file."""
-    doc = Document(file_path)
+    doc = Document(str(file_path))
     text_parts = []
 
     for para in doc.paragraphs:
@@ -74,7 +74,7 @@ def export_to_docx(content: str, output_path: str | Path) -> None:
 
     # Split by markdown headers and paragraphs
     lines = content.split("\n")
-    current_para = []
+    current_para: list[str] = []
 
     for line in lines:
         line = line.strip()
@@ -112,4 +112,4 @@ def export_to_docx(content: str, output_path: str | Path) -> None:
         doc.add_paragraph(" ".join(current_para))
 
     # Save document
-    doc.save(output_path)
+    doc.save(str(output_path))

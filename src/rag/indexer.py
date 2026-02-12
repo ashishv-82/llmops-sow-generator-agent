@@ -144,7 +144,7 @@ class DocumentIndexer:
     def clear_collection(self) -> None:
         """Clear all documents from the collection."""
         self.chroma_client.delete_collection(name=self.collection_name)
-        self.collection = self.chroma_client.create_collection(
+        self.collection = self.chroma_client.get_or_create_collection(
             name=self.collection_name,
             metadata={"description": "SOW documents and knowledge base"},
         )

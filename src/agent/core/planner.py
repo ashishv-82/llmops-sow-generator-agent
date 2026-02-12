@@ -4,7 +4,7 @@ Planner/Orchestrator for the SOW Generator agent.
 Uses LangGraph to orchestrate tool execution and generate responses.
 """
 
-from typing import Annotated, Literal, TypedDict
+from typing import Annotated, Any, Literal, TypedDict
 
 from langchain_aws import ChatBedrock
 from langchain_core.messages import AIMessage, BaseMessage, HumanMessage, SystemMessage
@@ -30,7 +30,7 @@ class SOWAgent:
         """Initialize the agent with LLM and tools."""
         # Initialize LLM
         self.llm = ChatBedrock(
-            model_id=config.bedrock_model_id,
+            model=config.bedrock_model_id,
             client=config.bedrock_runtime,
             model_kwargs={
                 "temperature": config.temperature,
@@ -47,7 +47,7 @@ class SOWAgent:
         # Create graph
         self.graph = self._create_graph()
 
-    def _create_graph(self) -> StateGraph:
+    def _create_graph(self) -> Any:
         """Create the LangGraph state graph."""
         # Define the graph
         workflow = StateGraph(AgentState)
@@ -134,7 +134,8 @@ class SOWAgent:
         final_message = final_state["messages"][-1]
 
         if isinstance(final_message, AIMessage):
-            return final_message.content
+            from typing import cast
+            return cast(str, final_message.content)
 
         return str(final_message)
 
@@ -158,7 +159,8 @@ class SOWAgent:
         final_message = final_state["messages"][-1]
 
         if isinstance(final_message, AIMessage):
-            return final_message.content
+            from typing import cast
+            return cast(str, final_message.content)
 
         return str(final_message)
 

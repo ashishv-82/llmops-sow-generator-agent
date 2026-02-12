@@ -67,5 +67,6 @@ class BedrockEmbeddings:
             contentType="application/json",
         )
 
+        from typing import cast
         response_body = json.loads(response["body"].read())
-        return response_body["embedding"]
+        return cast(list[float], response_body["embedding"])
