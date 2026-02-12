@@ -8,7 +8,7 @@ import json
 import logging
 import time
 from collections.abc import Callable
-from datetime import datetime
+from datetime import UTC, datetime
 from functools import wraps
 from pathlib import Path
 from typing import Any
@@ -49,7 +49,7 @@ class AuditLogger:
             user: User identifier (for future auth)
         """
         log_entry = {
-            "timestamp": datetime.utcnow().isoformat() + "Z",
+            "timestamp": datetime.now(UTC).isoformat(),
             "endpoint": endpoint,
             "method": method,
             "user": user,
@@ -95,7 +95,7 @@ class AuditLogger:
 
     def _get_log_file(self) -> Path:
         """Get today's log file path."""
-        today = datetime.utcnow().strftime("%Y-%m-%d")
+        today = datetime.now(UTC).strftime("%Y-%m-%d")
         from typing import cast
 
         return cast(Path, self.log_dir / f"audit_{today}.jsonl")

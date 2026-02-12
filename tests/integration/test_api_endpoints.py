@@ -5,7 +5,10 @@ from fastapi.testclient import TestClient
 
 from src.api.main import app
 
-client = TestClient(app)
+# Create the test client once
+# The bedrock_runtime mock is applied at the module level
+with patch("src.agent.config.Config.bedrock_runtime", new_callable=lambda: MagicMock()):
+    client = TestClient(app)
 
 
 def test_health_check():

@@ -48,6 +48,7 @@ def test_agent_graph_execution_flow():
         }
 
     with (
+        patch("src.agent.config.Config.bedrock_runtime", new_callable=lambda: MagicMock()),
         patch("src.agent.core.planner.ChatBedrock", return_value=mock_llm),
         patch("src.agent.core.planner.get_system_prompt", return_value="SysPrompt"),
         patch("langgraph.prebuilt.tool_node.ToolNode.__call__", side_effect=mock_tool_node_call),
