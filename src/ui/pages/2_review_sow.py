@@ -40,7 +40,7 @@ st.markdown(
     """
 <style>
     /* Force white text on primary buttons */
-    div[data-testid="stButton"] > button[kind="primary"] p, 
+    div[data-testid="stButton"] > button[kind="primary"] p,
     div[data-testid="stFormSubmitButton"] button p {
         color: #FFFFFF !important;
         font-weight: 600 !important;

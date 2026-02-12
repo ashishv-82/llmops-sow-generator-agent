@@ -55,7 +55,7 @@ def generate_sow_draft(
     template = template_file.read_text()
 
     # Build system prompt
-    system_prompt = """You are an expert SOW (Statement of Work) writer. 
+    system_prompt = """You are an expert SOW (Statement of Work) writer.
 Generate a professional, comprehensive SOW based on the provided context and template.
 
 Key requirements:
@@ -131,7 +131,7 @@ Generate a comprehensive, professional SOW based on the provided context.
 
 Key requirements:
 - Use formal, professional language
-- Include all mandatory compliance clauses  
+- Include all mandatory compliance clauses
 - Base technical details on product information provided
 - Reference similar past SOWs for structure and pricing
 - Ensure all sections are complete and specific (no placeholders)

@@ -15,7 +15,7 @@ def apply_custom_css():
         <style>
         /* IMPORT FONTS */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-        
+
         /* GLOBAL RESET & VARIABLES */
         :root {
             --bg-color: #050505;
@@ -36,11 +36,11 @@ def apply_custom_css():
         .stApp {
             background-color: var(--bg-color);
         }
-        
+
         /* HIDE DEFAULT STREAMLIT ELEMENTS */
         [data-testid="stHeader"] { display: none; }
         footer { display: none !important; }
-        
+
         /* CONTAINER SPACING */
         .block-container {
             padding-top: 1rem !important;
@@ -56,7 +56,7 @@ def apply_custom_css():
             padding: 0.5rem 0;
             margin-bottom: 1.5rem;
         }
-        
+
         .logo-container {
             display: flex;
             align-items: center;
@@ -65,7 +65,7 @@ def apply_custom_css():
             font-weight: 700;
             letter-spacing: -0.02em;
         }
-        
+
         .logo-square {
             width: 12px;
             height: 12px;
@@ -79,7 +79,7 @@ def apply_custom_css():
             text-decoration: none;
             transition: color 0.2s;
         }
-        
+
         .login-link:hover {
             color: var(--text-primary);
         }
@@ -89,14 +89,14 @@ def apply_custom_css():
             text-align: center;
             margin-bottom: 4rem;
         }
-        
+
         .hero-title {
             font-size: 3.5rem;
             font-weight: 700;
             letter-spacing: -0.03em;
             margin-bottom: 1rem;
         }
-        
+
         .hero-subtitle {
             color: var(--text-secondary);
             font-size: 1.1rem;
@@ -119,12 +119,12 @@ def apply_custom_css():
             position: relative;
             overflow: hidden;
         }
-        
+
         .agent-card:hover {
             border-color: #444;
             transform: translateY(-2px);
         }
-        
+
         .card-icon {
             width: 40px;
             height: 40px;
@@ -137,7 +137,7 @@ def apply_custom_css():
             margin-bottom: 1.5rem;
             font-size: 1.2rem;
         }
-        
+
         /* Icon Colors specific variants if needed, but keeping it uniform for consistency */
         .icon-sow { color: #D92D20; background: rgba(217, 45, 32, 0.1); }
         .icon-audit { color: #D92D20; background: rgba(217, 45, 32, 0.1); }
@@ -150,14 +150,14 @@ def apply_custom_css():
             font-weight: 600;
             margin-bottom: 0.75rem;
         }
-        
+
         .card-description {
             color: var(--text-secondary);
             font-size: 0.9rem;
             line-height: 1.5;
             flex-grow: 1;
         }
-        
+
         .card-action {
             display: flex;
             align-items: center;
@@ -167,11 +167,11 @@ def apply_custom_css():
             font-weight: 500;
             font-size: 0.9rem;
         }
-        
+
         .card-arrow {
             transition: transform 0.2s ease;
         }
-        
+
         .agent-card:hover .card-arrow {
             transform: translateX(4px);
         }
@@ -182,7 +182,7 @@ def apply_custom_css():
             border-color: var(--card-border) !important;
             color: white !important;
         }
-        
+
         .stButton > button[kind="primary"], div[data-testid="stFormSubmitButton"] button {
             background-color: var(--accent-red) !important;
             border: none !important;
@@ -198,7 +198,7 @@ def apply_custom_css():
              display: flex;
              flex-direction: column;
         }
-        
+
         /* The main scrollable content area */
         section[data-testid="stSidebar"] div[data-testid="stSidebarUserContent"] {
             display: flex;
@@ -207,7 +207,7 @@ def apply_custom_css():
             padding-bottom: 0rem !important; /* Remove excessive padding */
             overflow: hidden !important; /* Hide scrollbar if content fits */
         }
-        
+
         /* REFINED SIDEBAR FOOTER */
         /* The container wrapping our footer */
         section[data-testid="stSidebar"] div[data-testid="stSidebarUserContent"] > div:has(.sidebar-footer) {
@@ -444,7 +444,7 @@ def apply_custom_css():
             color: #F87171; /* text-red-400 */
             background: transparent;
         }
-        
+
         .pill-green {
             background: rgba(16, 185, 129, 0.1);
             color: #34D399; /* Emerald 400 */

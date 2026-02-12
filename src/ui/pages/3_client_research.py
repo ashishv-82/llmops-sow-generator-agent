@@ -203,7 +203,7 @@ if submit_client:
                                     <div style="padding: 0.75rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); color: #888; font-size: 0.9rem; display: flex; align-items: center; gap: 10px;">
                                         <div style="background: rgba(255,255,255,0.1); width: 24px; height: 24px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">📄</div>
                                         <div>
-                                            <strong>{sow.get('title')}</strong> 
+                                            <strong>{sow.get('title')}</strong>
                                             <span style="color: #555; margin-left: 8px;">{sow.get('year')}</span>
                                         </div>
                                     </div>

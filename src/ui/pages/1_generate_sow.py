@@ -38,7 +38,7 @@ st.markdown(
         font-weight: 600 !important;
         font-size: 16px !important;
     }
-    
+
     /* SOW Document Styling - Legal/Professional Look */
     .sow-document h1,
     .sow-document h2,
@@ -50,28 +50,28 @@ st.markdown(
         margin-top: 2rem !important;
         margin-bottom: 1rem !important;
     }
-    
+
     .sow-document h1 {
         font-size: 1.75rem !important;
         border-bottom: 1px solid rgba(255,255,255,0.1);
         padding-bottom: 0.5rem;
     }
-    
+
     .sow-document h2 {
         font-size: 1.4rem !important;
     }
-    
+
     .sow-document h3 {
         font-size: 1.15rem !important;
     }
-    
+
     .sow-document p {
         font-family: 'Georgia', 'Times New Roman', serif !important;
         line-height: 1.8 !important;
         color: #d1d1d1 !important;
         margin-bottom: 1rem !important;
     }
-    
+
     .sow-document ul, .sow-document ol {
         font-family: 'Georgia', 'Times New Roman', serif !important;
         color: #d1d1d1 !important;
