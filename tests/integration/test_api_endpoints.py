@@ -3,37 +3,33 @@ from unittest.mock import MagicMock, patch
 import pytest
 from fastapi.testclient import TestClient
 
+from src.api.dependencies import get_sow_agent
 from src.api.main import app
 
-
-@pytest.fixture(scope="module", autouse=True)
-def mock_sow_agent_instance():
-    """Mock SOWAgent instance for all API endpoint tests to avoid AWS setup."""
-    mock_agent = MagicMock()
-    with patch("src.agent.core.planner.get_agent", return_value=mock_agent):
-        yield mock_agent
+# Create a module-level mock agent that all tests share
+_mock_agent = MagicMock()
 
 
-@pytest.fixture(scope="module")
-def client(mock_sow_agent_instance):
-    """Create FastAPI test client after mocks are in place."""
-    return TestClient(app)
+def _override_get_sow_agent():
+    """Return mock agent instead of real one (avoids AWS calls)."""
+    return _mock_agent
 
 
-def test_health_check(client):
+# Override FastAPI dependency before creating TestClient
+app.dependency_overrides[get_sow_agent] = _override_get_sow_agent
+client = TestClient(app)
+
+
+def test_health_check():
     response = client.get("/api/v1/health")
     assert response.status_code == 200
     assert response.json()["status"] == "healthy"
 
 
-@patch("src.agent.core.planner.SOWAgent.run")
-def test_create_sow_endpoint(mock_run, client):
-    mock_run.return_value = "# Generated SOW\n\nContent..."
+def test_create_sow_endpoint():
+    _mock_agent.run.return_value = "# Generated SOW\n\nContent..."
 
     payload = {"client_id": "CLIENT-001", "product": "Product X", "requirements": "Standard terms"}
-
-    # We need to authenticate or mock auth if present?
-    # Current implementation has no auth middleware check in tests visible yet.
 
     response = client.post("/api/v1/sow/create", json=payload)
 
@@ -42,14 +38,17 @@ def test_create_sow_endpoint(mock_run, client):
     assert data["sow_text"] == "# Generated SOW\n\nContent..."
 
     # Verify agent was called with constructed prompt
-    mock_run.assert_called_once()
-    prompt = mock_run.call_args[0][0]
+    _mock_agent.run.assert_called_once()
+    prompt = _mock_agent.run.call_args[0][0]
     assert "CLIENT-001" in prompt
     assert "Product X" in prompt
 
+    # Reset for other tests
+    _mock_agent.run.reset_mock()
+
 
 @patch("src.agent.tools.research.search_crm.func")
-def test_research_client_endpoint(mock_search, client):
+def test_research_client_endpoint(mock_search):
     mock_search.return_value = {"name": "Test Client", "industry": "Tech"}
 
     payload = {"client_name": "Test Client"}
@@ -61,7 +60,7 @@ def test_research_client_endpoint(mock_search, client):
 
 
 @patch("src.agent.tools.research.search_product_kb.func")
-def test_research_product_endpoint(mock_search, client):
+def test_research_product_endpoint(mock_search):
     mock_search.return_value = {
         "product": "Prod Y",
         "content": "Info",
